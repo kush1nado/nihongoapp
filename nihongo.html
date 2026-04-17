@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>日本語 — Изучение японского</title>
+<meta name="description" content="Приложение для изучения японского: кандзи N5, карточки SRS, словарь, грамматика">
+<meta name="theme-color" content="#ffffff">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f4;
+    --bg3: #eeecea;
+    --text: #1a1a1a;
+    --text2: #6b6b6b;
+    --text3: #9b9b9b;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --green: #1D9E75;
+    --green-bg: #EAF3DE;
+    --green-text: #3B6D11;
+    --green-border: #97C459;
+    --blue-bg: #E6F1FB;
+    --blue-text: #185FA5;
+    --blue-border: #85B7EB;
+    --red-bg: #FCEBEB;
+    --red-text: #A32D2D;
+    --red-border: #F09595;
+    --amber-bg: #FAEEDA;
+    --amber-text: #854F0B;
+    --purple-bg: #EEEDFE;
+    --purple-text: #3C3489;
+    --r-md: 8px;
+    --r-lg: 12px;
+    --r-xl: 16px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e;
+      --bg2: #2c2c2e;
+      --bg3: #3a3a3c;
+      --text: #f0f0f0;
+      --text2: #aeaeb2;
+      --text3: #6e6e73;
+      --border: rgba(255,255,255,0.12);
+      --border2: rgba(255,255,255,0.22);
+      --green-bg: #173404;
+      --green-text: #C0DD97;
+      --green-border: #3B6D11;
+      --blue-bg: #042C53;
+      --blue-text: #B5D4F4;
+      --blue-border: #185FA5;
+      --red-bg: #501313;
+      --red-text: #F7C1C1;
+      --red-border: #A32D2D;
+      --amber-bg: #412402;
+      --amber-text: #FAC775;
+      --purple-bg: #26215C;
+      --purple-text: #CECBF6;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
+
+  /* App shell */
+  .app-wrap { max-width: 480px; margin: 0 auto; background: var(--bg3); min-height: 100vh; position: relative; }
+  .header { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 14px 16px 10px; position: sticky; top: 0; z-index: 10; }
+  .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .app-title { font-size: 20px; font-weight: 600; }
+  .header-badges { display: flex; gap: 6px; align-items: center; }
+  .badge { font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 500; }
+  .badge-blue { background: var(--blue-bg); color: var(--blue-text); }
+  .badge-green { background: var(--green-bg); color: var(--green-text); }
+  .prog-bar { height: 3px; background: var(--bg3); border-radius: 2px; }
+  .prog-fill { height: 100%; border-radius: 2px; background: var(--green); transition: width .4s; }
+
+  /* Nav */
+  .nav { display: flex; background: var(--bg); border-bottom: 0.5px solid var(--border); }
+  .nav-btn { flex: 1; padding: 11px 4px; border: none; background: transparent; color: var(--text2); font-size: 11px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; }
+  .nav-btn.active { color: var(--green); border-bottom-color: var(--green); }
+
+  /* Screens */
+  .screen { display: none; padding: 16px; }
+  .screen.active { display: block; }
+
+  /* ---- SRS ---- */
+  .card-area { margin-bottom: 16px; }
+  .flashcard { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r-xl); padding: 28px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; min-height: 200px; position: relative; user-select: none; }
+  .fc-tag { position: absolute; top: 12px; left: 14px; font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--blue-bg); color: var(--blue-text); font-weight: 500; }
+  .fc-count { position: absolute; top: 12px; right: 14px; font-size: 10px; color: var(--text3); }
+  .fc-kanji { font-size: 80px; line-height: 1; margin-bottom: 8px; }
+  .fc-read { font-size: 18px; color: var(--text2); margin-bottom: 6px; display: none; }
+  .fc-mean { font-size: 15px; font-weight: 500; display: none; }
+  .fc-hint { font-size: 12px; color: var(--text3); margin-top: 14px; }
+  .flipped .fc-read, .flipped .fc-mean { display: block; }
+  .flipped .fc-hint { display: none; }
+
+  .srs-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .srs-btn { padding: 11px 0; border-radius: var(--r-md); border: 0.5px solid var(--border); font-size: 13px; font-weight: 500; cursor: pointer; line-height: 1.4; transition: opacity .15s; }
+  .srs-btn:active { opacity: .7; }
+  .srs-btn.hard { background: var(--red-bg); color: var(--red-text); border-color: var(--red-border); }
+  .srs-btn.ok   { background: var(--amber-bg); color: var(--amber-text); border-color: #FAC775; }
+  .srs-btn.easy { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
+
+  .stats-row { display: flex; gap: 8px; }
+  .stat-box { flex: 1; text-align: center; padding: 10px 6px; background: var(--bg); border-radius: var(--r-md); border: 0.5px solid var(--border); }
+  .stat-n { font-size: 22px; font-weight: 600; }
+  .stat-l { font-size: 10px; color: var(--text2); margin-top: 2px; }
+
+  .done-card { background: var(--bg); border-radius: var(--r-xl); padding: 40px 20px; text-align: center; }
+  .done-emoji { font-size: 52px; margin-bottom: 12px; }
+  .done-title { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+  .done-sub { font-size: 14px; color: var(--text2); }
+
+  /* ---- Kanji ---- */
+  .kanji-panel { background: var(--bg); border-radius: var(--r-lg); border: 0.5px solid var(--border); padding: 16px; margin-bottom: 14px; }
+  .kp-top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+  .anim-box { width: 170px; min-width: 170px; }
+  .svg-frame { width: 150px; height: 150px; background: var(--bg2); border-radius: var(--r-lg); margin-bottom: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .svg-frame svg { width: 100%; height: 100%; }
+  .anim-ctrl { display: flex; gap: 5px; align-items: center; justify-content: center; }
+  .ac-btn { padding: 5px 11px; border-radius: var(--r-md); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); font-size: 12px; cursor: pointer; }
+  .ac-btn.play { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
+  .ac-num { font-size: 11px; color: var(--text2); min-width: 32px; text-align: center; }
+
+  .kinfo { flex: 1; }
+  .kinfo-meaning { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+  .kinfo-row { font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+  .kinfo-row b { color: var(--text); font-weight: 500; }
+  .rads { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+  .rad { padding: 2px 8px; background: var(--bg2); border-radius: var(--r-md); font-size: 13px; }
+
+  .mark-btn { width: 100%; padding: 10px; border-radius: var(--r-md); font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
+  .mark-btn:active { opacity: .7; }
+  .mark-btn.learn { border: 0.5px solid var(--green-border); background: var(--green-bg); color: var(--green-text); }
+  .mark-btn.unlearn { border: 0.5px solid var(--red-border); background: var(--red-bg); color: var(--red-text); }
+
+  .section-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 8px; }
+  .k-filters { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+  .k-filter { padding: 4px 11px; border-radius: 20px; border: 0.5px solid var(--border); background: var(--bg); color: var(--text2); font-size: 11px; cursor: pointer; font-weight: 500; }
+  .k-filter.on { background: var(--blue-bg); color: var(--blue-text); border-color: var(--blue-border); }
+  .k-search { width: 100%; padding: 9px 13px; border: 0.5px solid var(--border); border-radius: var(--r-md); font-size: 14px; background: var(--bg); color: var(--text); margin-bottom: 10px; outline: none; }
+  .k-search:focus { border-color: var(--green); }
+
+  .kanji-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .k-tile { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r-md); cursor: pointer; font-size: 24px; transition: all .12s; }
+  .k-tile:active { transform: scale(0.93); }
+  .k-tile.learned { background: var(--green-bg); border-color: var(--green-border); }
+  .k-tile.sel { border: 2px solid var(--green); }
+
+  /* ---- Vocab ---- */
+  .vocab-list { display: flex; flex-direction: column; gap: 8px; }
+  .vocab-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+  .vocab-jp { font-size: 24px; min-width: 52px; }
+  .vocab-reading { font-size: 11px; color: var(--text2); }
+  .vocab-meaning { font-size: 14px; font-weight: 500; }
+  .vocab-tag { font-size: 9px; padding: 2px 6px; background: var(--purple-bg); color: var(--purple-text); border-radius: 4px; white-space: nowrap; margin-left: auto; }
+
+  /* ---- Grammar ---- */
+  .grammar-list { display: flex; flex-direction: column; gap: 8px; }
+  .g-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: 14px; cursor: pointer; }
+  .g-head { display: flex; justify-content: space-between; align-items: center; }
+  .g-pattern { font-size: 15px; font-weight: 600; }
+  .g-lvl { font-size: 10px; padding: 2px 7px; background: var(--amber-bg); color: var(--amber-text); border-radius: 4px; font-weight: 500; }
+  .g-meaning { font-size: 12px; color: var(--text2); margin-top: 3px; }
+  .g-body { display: none; margin-top: 12px; border-top: 0.5px solid var(--border); padding-top: 12px; }
+  .g-card.open .g-body { display: block; }
+  .g-ex { margin-bottom: 8px; }
+  .g-ex-jp { font-size: 15px; font-weight: 500; margin-bottom: 2px; }
+  .g-ex-ru { font-size: 12px; color: var(--text2); }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--green-bg); color: var(--green-text); border: 0.5px solid var(--green-border); border-radius: 20px; padding: 7px 16px; font-size: 12px; font-weight: 500; opacity: 0; transition: opacity .25s; pointer-events: none; white-space: nowrap; z-index: 100; }
+  .toast.show { opacity: 1; }
+
+  /* Loading skeleton */
+  .svg-loading { font-size: 12px; color: var(--text3); text-align: center; }
+  .svg-fallback { font-size: 64px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="app-wrap">
+  <div class="header">
+    <div class="header-row">
+      <span class="app-title">日本語</span>
+      <div class="header-badges">
+        <span class="badge badge-green" id="streak-badge">🔥 0 дней</span>
+        <span class="badge badge-blue">N5</span>
+      </div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="main-prog" style="width:0%"></div></div>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showTab('srs',this)">Карточки</button>
+    <button class="nav-btn" onclick="showTab('kanji',this)">漢字</button>
+    <button class="nav-btn" onclick="showTab('vocab',this)">Слова</button>
+    <button class="nav-btn" onclick="showTab('grammar',this)">Грамматика</button>
+  </nav>
+
+  <!-- SRS -->
+  <div class="screen active" id="tab-srs">
+    <div class="card-area" id="card-area">
+      <div class="flashcard" id="fc" onclick="flipCard()">
+        <div class="fc-tag" id="fc-tag"></div>
+        <div class="fc-count" id="fc-count"></div>
+        <div class="fc-kanji" id="fc-kanji"></div>
+        <div class="fc-read" id="fc-read"></div>
+        <div class="fc-mean" id="fc-mean"></div>
+        <div class="fc-hint">нажми, чтобы раскрыть</div>
+      </div>
+    </div>
+    <div class="srs-btns" id="srs-btns" style="display:none">
+      <button class="srs-btn hard" onclick="rateCard(1)">Сложно<br><span style="font-size:10px;opacity:.7">завтра</span></button>
+      <button class="srs-btn ok"   onclick="rateCard(3)">Нормально<br><span style="font-size:10px;opacity:.7">4 дня</span></button>
+      <button class="srs-btn easy" onclick="rateCard(5)">Легко<br><span style="font-size:10px;opacity:.7">10 дней</span></button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-n" id="s-due">0</div><div class="stat-l">осталось</div></div>
+      <div class="stat-box"><div class="stat-n" id="s-done">0</div><div class="stat-l">сделано</div></div>
+      <div class="stat-box"><div class="stat-n" id="s-streak">0</div><div class="stat-l">дней подряд</div></div>
+    </div>
+  </div>
+
+  <!-- Kanji -->
+  <div class="screen" id="tab-kanji">
+    <div class="kanji-panel" id="k-panel" style="display:none">
+      <div class="kp-top">
+        <div class="anim-box">
+          <div class="svg-frame" id="svg-frame"><div class="svg-loading">выбери кандзи</div></div>
+          <div class="anim-ctrl">
+            <button class="ac-btn" onclick="stepS(-1)">←</button>
+            <span class="ac-num" id="s-num">—</span>
+            <button class="ac-btn" onclick="stepS(1)">→</button>
+            <button class="ac-btn play" onclick="playAnim()">▶</button>
+          </div>
+        </div>
+        <div class="kinfo">
+          <div class="kinfo-meaning" id="k-mean"></div>
+          <div class="kinfo-row">音読み: <b id="k-on"></b></div>
+          <div class="kinfo-row">訓読み: <b id="k-kun"></b></div>
+          <div class="kinfo-row">Штрихов: <b id="k-s"></b></div>
+          <div class="rads" id="k-rads"></div>
+        </div>
+      </div>
+      <button class="mark-btn learn" id="mark-btn" onclick="toggleLearned()">Отметить как выученный</button>
+    </div>
+    <input class="k-search" id="k-search" placeholder="Поиск кандзи или значения..." oninput="renderGrid()">
+    <div class="k-filters">
+      <button class="k-filter on" onclick="setFilter('all',this)">Все</button>
+      <button class="k-filter" onclick="setFilter('new',this)">Новые</button>
+      <button class="k-filter" onclick="setFilter('done',this)">Выученные</button>
+      <button class="k-filter" onclick="setFilter('easy',this)">≤4 штриха</button>
+      <button class="k-filter" onclick="setFilter('hard',this)">8+ штрихов</button>
+    </div>
+    <div class="section-label" id="grid-label"></div>
+    <div class="kanji-grid" id="k-grid"></div>
+  </div>
+
+  <!-- Vocab -->
+  <div class="screen" id="tab-vocab">
+    <div class="section-label" id="vocab-label">Словарь N5</div>
+    <div class="vocab-list" id="vocab-list"></div>
+  </div>
+
+  <!-- Grammar -->
+  <div class="screen" id="tab-grammar">
+    <div class="section-label">Грамматика N5 — основные паттерны</div>
+    <div class="grammar-list" id="grammar-list"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✓ сохранено</div>
+
+<script>
+// ===================== DATA =====================
+const KANJI = [
+  {k:'日',m:'день/солнце',on:'ニチ、ジツ',kun:'ひ、か',s:4,r:['日']},
+  {k:'月',m:'луна/месяц',on:'ゲツ、ガツ',kun:'つき',s:4,r:['月']},
+  {k:'火',m:'огонь',on:'カ',kun:'ひ',s:4,r:['火']},
+  {k:'水',m:'вода',on:'スイ',kun:'みず',s:4,r:['水']},
+  {k:'木',m:'дерево',on:'モク、ボク',kun:'き',s:4,r:['木']},
+  {k:'金',m:'золото/деньги',on:'キン、コン',kun:'かね',s:8,r:['人','王']},
+  {k:'土',m:'земля',on:'ド、ト',kun:'つち',s:3,r:['土']},
+  {k:'山',m:'гора',on:'サン',kun:'やま',s:3,r:['山']},
+  {k:'川',m:'река',on:'セン',kun:'かわ',s:3,r:['川']},
+  {k:'人',m:'человек',on:'ジン、ニン',kun:'ひと',s:2,r:['人']},
+  {k:'口',m:'рот',on:'コウ、ク',kun:'くち',s:3,r:['口']},
+  {k:'手',m:'рука',on:'シュ',kun:'て',s:4,r:['手']},
+  {k:'目',m:'глаз',on:'モク、ボク',kun:'め',s:5,r:['目']},
+  {k:'耳',m:'ухо',on:'ジ',kun:'みみ',s:6,r:['耳']},
+  {k:'足',m:'нога',on:'ソク',kun:'あし',s:7,r:['口','止']},
+  {k:'力',m:'сила',on:'リョク、リキ',kun:'ちから',s:2,r:['力']},
+  {k:'大',m:'большой',on:'ダイ、タイ',kun:'おお',s:3,r:['大']},
+  {k:'小',m:'маленький',on:'ショウ',kun:'ちい',s:3,r:['小']},
+  {k:'中',m:'середина',on:'チュウ',kun:'なか',s:4,r:['口']},
+  {k:'上',m:'верх',on:'ジョウ',kun:'うえ',s:3,r:['上']},
+  {k:'下',m:'низ',on:'カ、ゲ',kun:'した',s:3,r:['下']},
+  {k:'左',m:'левый',on:'サ',kun:'ひだり',s:5,r:['工','又']},
+  {k:'右',m:'правый',on:'ウ、ユウ',kun:'みぎ',s:5,r:['口','又']},
+  {k:'国',m:'страна',on:'コク',kun:'くに',s:8,r:['囗','玉']},
+  {k:'語',m:'язык/слово',on:'ゴ',kun:'かた',s:14,r:['言','吾']},
+  {k:'学',m:'учёба',on:'ガク',kun:'まな',s:8,r:['子']},
+  {k:'生',m:'жизнь/родиться',on:'セイ、ショウ',kun:'い、う',s:5,r:['生']},
+  {k:'先',m:'впереди/раньше',on:'セン',kun:'さき',s:6,r:['生','儿']},
+  {k:'年',m:'год',on:'ネン',kun:'とし',s:6,r:['年']},
+  {k:'時',m:'время/час',on:'ジ',kun:'とき',s:10,r:['日','寺']},
+  {k:'間',m:'между',on:'カン、ケン',kun:'ま、あいだ',s:12,r:['門','日']},
+  {k:'本',m:'книга/основа',on:'ホン',kun:'もと',s:5,r:['木']},
+  {k:'文',m:'текст/письмо',on:'ブン、モン',kun:'ふみ',s:4,r:['文']},
+  {k:'字',m:'иероглиф/буква',on:'ジ',kun:'あざ',s:6,r:['宀','子']},
+  {k:'名',m:'имя',on:'メイ、ミョウ',kun:'な',s:6,r:['夕','口']},
+  {k:'白',m:'белый',on:'ハク',kun:'しろ',s:5,r:['白']},
+  {k:'百',m:'сто',on:'ヒャク',kun:'—',s:6,r:['白']},
+  {k:'千',m:'тысяча',on:'セン',kun:'ち',s:3,r:['千']},
+  {k:'万',m:'десять тысяч',on:'マン',kun:'—',s:3,r:['万']},
+  {k:'円',m:'иена/круг',on:'エン',kun:'まる',s:4,r:['円']},
+  {k:'何',m:'что/сколько',on:'カ',kun:'なに、なん',s:7,r:['人','可']},
+  {k:'今',m:'сейчас',on:'コン、キン',kun:'いま',s:4,r:['亼']},
+  {k:'来',m:'приходить',on:'ライ',kun:'く',s:7,r:['来']},
+  {k:'行',m:'идти',on:'コウ、ギョウ',kun:'い、ゆ',s:6,r:['彳']},
+  {k:'見',m:'видеть',on:'ケン',kun:'み',s:7,r:['目','儿']},
+  {k:'聞',m:'слышать/спрашивать',on:'ブン、モン',kun:'き',s:14,r:['門','耳']},
+  {k:'言',m:'говорить',on:'ゲン、ゴン',kun:'い',s:7,r:['言']},
+  {k:'読',m:'читать',on:'ドク',kun:'よ',s:14,r:['言']},
+  {k:'書',m:'писать',on:'ショ',kun:'か',s:10,r:['聿']},
+  {k:'食',m:'еда/есть',on:'ショク',kun:'た',s:9,r:['亼','良']},
+  {k:'飲',m:'пить',on:'イン',kun:'の',s:12,r:['食']},
+  {k:'買',m:'покупать',on:'バイ',kun:'か',s:12,r:['罒','貝']},
+  {k:'出',m:'выходить',on:'シュツ',kun:'で',s:5,r:['出']},
+  {k:'入',m:'входить',on:'ニュウ',kun:'い',s:2,r:['入']},
+  {k:'会',m:'встречать',on:'カイ',kun:'あ',s:6,r:['亼']},
+  {k:'話',m:'разговор',on:'ワ',kun:'はな',s:13,r:['言','舌']},
+  {k:'電',m:'электричество',on:'デン',kun:'—',s:13,r:['雨']},
+  {k:'車',m:'машина',on:'シャ',kun:'くるま',s:7,r:['車']},
+  {k:'駅',m:'станция',on:'エキ',kun:'—',s:14,r:['馬']},
+  {k:'道',m:'дорога/путь',on:'ドウ',kun:'みち',s:12,r:['辶','首']},
+  {k:'東',m:'восток',on:'トウ',kun:'ひがし',s:8,r:['木','日']},
+  {k:'西',m:'запад',on:'セイ',kun:'にし',s:6,r:['西']},
+  {k:'南',m:'юг',on:'ナン',kun:'みなみ',s:9,r:['十']},
+  {k:'北',m:'север',on:'ホク',kun:'きた',s:5,r:['北']},
+  {k:'外',m:'снаружи',on:'ガイ',kun:'そと',s:5,r:['夕']},
+  {k:'内',m:'внутри',on:'ナイ',kun:'うち',s:4,r:['冂']},
+  {k:'前',m:'перед/раньше',on:'ゼン',kun:'まえ',s:9,r:['前']},
+  {k:'後',m:'после/сзади',on:'ゴ、コウ',kun:'あと',s:9,r:['彳']},
+  {k:'新',m:'новый',on:'シン',kun:'あたら',s:13,r:['立','木','斤']},
+  {k:'古',m:'старый',on:'コ',kun:'ふる',s:5,r:['十','口']},
+  {k:'高',m:'высокий/дорогой',on:'コウ',kun:'たか',s:10,r:['高']},
+  {k:'長',m:'длинный',on:'チョウ',kun:'なが',s:8,r:['長']},
+  {k:'好',m:'нравиться',on:'コウ',kun:'す',s:6,r:['女','子']},
+  {k:'友',m:'друг',on:'ユウ',kun:'とも',s:4,r:['又']},
+  {k:'父',m:'отец',on:'フ',kun:'ちち',s:4,r:['父']},
+  {k:'母',m:'мать',on:'ボ',kun:'はは',s:5,r:['母']},
+  {k:'子',m:'ребёнок',on:'シ、ス',kun:'こ',s:3,r:['子']},
+  {k:'女',m:'женщина',on:'ジョ',kun:'おんな',s:3,r:['女']},
+  {k:'男',m:'мужчина',on:'ダン',kun:'おとこ',s:7,r:['田','力']},
+  {k:'花',m:'цветок',on:'カ',kun:'はな',s:7,r:['艹','化']},
+  {k:'犬',m:'собака',on:'ケン',kun:'いぬ',s:4,r:['犬']},
+  {k:'魚',m:'рыба',on:'ギョ',kun:'さかな',s:11,r:['魚']},
+];
+
+const VOCAB = [
+  {jp:'水',r:'みず',m:'вода',t:'N5'},
+  {jp:'山',r:'やま',m:'гора',t:'N5'},
+  {jp:'先生',r:'せんせい',m:'учитель',t:'N5'},
+  {jp:'学校',r:'がっこう',m:'школа',t:'N5'},
+  {jp:'食べる',r:'たべる',m:'есть, кушать',t:'глагол'},
+  {jp:'大きい',r:'おおきい',m:'большой',t:'прилаг.'},
+  {jp:'友達',r:'ともだち',m:'друг',t:'N5'},
+  {jp:'電車',r:'でんしゃ',m:'электричка',t:'N5'},
+  {jp:'駅',r:'えき',m:'станция',t:'N5'},
+  {jp:'今日',r:'きょう',m:'сегодня',t:'N5'},
+  {jp:'明日',r:'あした',m:'завтра',t:'N5'},
+  {jp:'何時',r:'なんじ',m:'который час?',t:'N5'},
+  {jp:'右',r:'みぎ',m:'правый',t:'N5'},
+  {jp:'左',r:'ひだり',m:'левый',t:'N5'},
+  {jp:'高い',r:'たかい',m:'высокий/дорогой',t:'прилаг.'},
+  {jp:'安い',r:'やすい',m:'дешёвый',t:'прилаг.'},
+  {jp:'新しい',r:'あたらしい',m:'новый',t:'прилаг.'},
+  {jp:'古い',r:'ふるい',m:'старый',t:'прилаг.'},
+  {jp:'飲む',r:'のむ',m:'пить',t:'глагол'},
+  {jp:'行く',r:'いく',m:'идти',t:'глагол'},
+  {jp:'来る',r:'くる',m:'приходить',t:'глагол'},
+  {jp:'見る',r:'みる',m:'смотреть',t:'глагол'},
+  {jp:'聞く',r:'きく',m:'слушать/спрашивать',t:'глагол'},
+  {jp:'書く',r:'かく',m:'писать',t:'глагол'},
+  {jp:'読む',r:'よむ',m:'читать',t:'глагол'},
+  {jp:'話す',r:'はなす',m:'говорить',t:'глагол'},
+  {jp:'起きる',r:'おきる',m:'просыпаться',t:'глагол'},
+  {jp:'寝る',r:'ねる',m:'спать/ложиться',t:'глагол'},
+  {jp:'買う',r:'かう',m:'покупать',t:'глагол'},
+  {jp:'出る',r:'でる',m:'выходить',t:'глагол'},
+];
+
+const GRAMMAR = [
+  {p:'〜は〜です',l:'N5',m:'Связка — это/есть',ex:[{jp:'これは本です。',ru:'Это книга.'},{jp:'わたしは学生です。',ru:'Я студент.'}]},
+  {p:'〜ですか？',l:'N5',m:'Вопросительная форма',ex:[{jp:'あなたは学生ですか？',ru:'Вы студент?'},{jp:'これは水ですか？',ru:'Это вода?'}]},
+  {p:'〜が好きです',l:'N5',m:'Нравится ~',ex:[{jp:'日本語が好きです。',ru:'Мне нравится японский.'},{jp:'犬が好きですか？',ru:'Тебе нравятся собаки?'}]},
+  {p:'〜て、〜',l:'N5',m:'Форма て — связь действий',ex:[{jp:'食べて、寝ます。',ru:'Поем и лягу спать.'},{jp:'起きて、学校へ行きます。',ru:'Встану и пойду в школу.'}]},
+  {p:'〜ない',l:'N5',m:'Отрицание глагола',ex:[{jp:'食べない。',ru:'Не ем.'},{jp:'行かない。',ru:'Не пойду.'}]},
+  {p:'〜たい',l:'N5',m:'Хочу ~ (желание)',ex:[{jp:'日本へ行きたい。',ru:'Хочу поехать в Японию.'},{jp:'水が飲みたい。',ru:'Хочу пить.'}]},
+  {p:'〜ている',l:'N5',m:'Длительное действие',ex:[{jp:'今、食べています。',ru:'Сейчас ем.'},{jp:'日本語を勉強しています。',ru:'Изучаю японский.'}]},
+  {p:'〜に行く',l:'N5',m:'Идти куда-то с целью',ex:[{jp:'学校に行く。',ru:'Идти в школу.'},{jp:'買い物に行きます。',ru:'Иду за покупками.'}]},
+  {p:'〜から〜まで',l:'N5',m:'От ~ до ~',ex:[{jp:'月曜日から金曜日まで。',ru:'С понедельника по пятницу.'},{jp:'東京から大阪まで。',ru:'От Токио до Осаки.'}]},
+  {p:'〜も',l:'N5',m:'Тоже (включение)',ex:[{jp:'私も学生です。',ru:'Я тоже студент.'},{jp:'これも好きです。',ru:'Это мне тоже нравится.'}]},
+  {p:'〜ませんか',l:'N5',m:'Предложение/приглашение',ex:[{jp:'一緒に食べませんか？',ru:'Не поедим вместе?'},{jp:'映画を見ませんか？',ru:'Не посмотрим фильм?'}]},
+  {p:'〜でしょう',l:'N5',m:'Вероятно/наверное',ex:[{jp:'明日は雨でしょう。',ru:'Завтра, наверное, дождь.'},{jp:'彼は学生でしょう。',ru:'Он, наверное, студент.'}]},
+];
+
+// ===================== STATE =====================
+let ST = {learned:{}, progress:{}, doneToday:0, streak:0, lastDate:''};
+try { const s = localStorage.getItem('nihongo_app'); if(s) ST = Object.assign(ST, JSON.parse(s)); } catch(e){}
+
+// Check streak
+const today = new Date().toDateString();
+if(ST.lastDate !== today) { ST.doneToday = 0; ST.lastDate = today; }
+
+function saveState() {
+  try { localStorage.setItem('nihongo_app', JSON.stringify(ST)); } catch(e){}
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1400);
+}
+
+// ===================== SRS =====================
+const SRS_CARDS = KANJI.map((k,i) => ({
+  id: i,
+  kanji: k.k,
+  read: k.kun.split('、')[0] !== '—' ? k.kun.split('、')[0] + '  (' + k.on.split('、')[0] + ')' : k.on.split('、')[0],
+  mean: k.m,
+  tag: k.s <= 3 ? 'простой' : k.s <= 6 ? 'средний' : 'сложный'
+}));
+
+let queue = [], curCard = null, cardFlipped = false, doneCount = 0;
+
+function buildQueue() {
+  const now = new Date();
+  queue = SRS_CARDS.filter(c => {
+    const p = ST.progress[c.id];
+    if (!p) return true;
+    return new Date(p.due) <= now;
+  }).slice(0, 20);
+  doneCount = 0;
+  if (queue.length === 0) { showDoneScreen(); return; }
+  loadCard();
+  updateSRSStats();
+}
+
+function loadCard() {
+  if (!queue.length) { showDoneScreen(); return; }
+  curCard = queue[0];
+  cardFlipped = false;
+  const fc = document.getElementById('fc');
+  fc.className = 'flashcard';
+  document.getElementById('fc-kanji').textContent = curCard.kanji;
+  document.getElementById('fc-read').textContent = curCard.read;
+  document.getElementById('fc-mean').textContent = curCard.mean;
+  document.getElementById('fc-tag').textContent = curCard.tag;
+  document.getElementById('fc-count').textContent = (SRS_CARDS.indexOf(curCard)+1 <= 0 ? '' : queue.length + ' карт');
+  document.getElementById('srs-btns').style.display = 'none';
+  document.getElementById('card-area').innerHTML = '';
+  document.getElementById('card-area').appendChild(fc);
+}
+
+function showDoneScreen() {
+  document.getElementById('card-area').innerHTML = `
+    <div class="done-card">
+      <div class="done-emoji">🎉</div>
+      <div class="done-title">На сегодня всё!</div>
+      <div class="done-sub">Все карточки повторены.<br>Возвращайся завтра — это и есть SRS.</div>
+    </div>`;
+  document.getElementById('srs-btns').style.display = 'none';
+}
+
+function flipCard() {
+  if (!curCard) return;
+  cardFlipped = !cardFlipped;
+  document.getElementById('fc').classList.toggle('flipped', cardFlipped);
+  document.getElementById('srs-btns').style.display = cardFlipped ? 'grid' : 'none';
+}
+
+function rateCard(r) {
+  if (!curCard) return;
+  const days = r===1 ? 1 : r===3 ? 4 : 10;
+  const due = new Date(); due.setDate(due.getDate() + days);
+  ST.progress[curCard.id] = { due: due.toISOString(), r };
+  if (r >= 3) { doneCount++; ST.doneToday++; }
+  if (r === 5 && !ST.learned[curCard.id]) { ST.learned[curCard.id] = true; }
+  queue.shift();
+  saveState();
+  updateSRSStats();
+  updateProgress();
+  if (!queue.length) showDoneScreen();
+  else loadCard();
+}
+
+function updateSRSStats() {
+  document.getElementById('s-due').textContent = queue.length;
+  document.getElementById('s-done').textContent = doneCount;
+  document.getElementById('s-streak').textContent = ST.streak;
+  document.getElementById('streak-badge').textContent = '🔥 ' + ST.streak + ' дней';
+}
+
+// ===================== KANJI =====================
+let kFilter = 'all', selIdx = null, kStrokes = [], kStrokeCur = 0, kAnimTimer = null;
+
+function toHex(ch) { return ch.codePointAt(0).toString(16).padStart(5,'0'); }
+
+async function loadSVG(ch) {
+  const frame = document.getElementById('svg-frame');
+  frame.innerHTML = '<div class="svg-loading">загрузка...</div>';
+  document.getElementById('s-num').textContent = '...';
+  kStrokes = []; kStrokeCur = 0;
+  try {
+    const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${toHex(ch)}.svg`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error();
+    const txt = await res.text();
+    const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+    kStrokes = Array.from(doc.querySelectorAll('path')).map(p => p.getAttribute('d')).filter(Boolean);
+    renderStrokes(kStrokes.length);
+    setTimeout(() => playAnim(), 150);
+  } catch(e) {
+    frame.innerHTML = `<div class="svg-fallback">${ch}</div>`;
+    document.getElementById('s-num').textContent = '—';
+  }
+}
+
+function renderStrokes(n) {
+  if (!kStrokes.length) return;
+  const frame = document.getElementById('svg-frame');
+  let paths = '';
+  kStrokes.forEach((d, i) => {
+    const cur = i === n-1, past = i < n-1;
+    const color = cur ? '#1D9E75' : past ? '#888' : 'transparent';
+    const op = cur ? 1 : past ? 0.35 : 0;
+    paths += `<path d="${d}" stroke="${color}" stroke-opacity="${op}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
+  });
+  frame.innerHTML = `<svg viewBox="0 0 109 109" xmlns="http://www.w3.org/2000/svg" width="150" height="150">
+    <rect x="0" y="0" width="109" height="109" fill="none" stroke="rgba(128,128,128,0.15)" stroke-width="0.5"/>
+    <line x1="54.5" y1="0" x2="54.5" y2="109" stroke="rgba(128,128,128,0.12)" stroke-width="0.5"/>
+    <line x1="0" y1="54.5" x2="109" y2="54.5" stroke="rgba(128,128,128,0.12)" stroke-width="0.5"/>
+    ${paths}
+  </svg>`;
+  kStrokeCur = n;
+  document.getElementById('s-num').textContent = n + '/' + kStrokes.length;
+}
+
+function stepS(dir) {
+  clearTimeout(kAnimTimer);
+  renderStrokes(Math.min(Math.max(1, kStrokeCur + dir), kStrokes.length));
+}
+
+function playAnim() {
+  clearTimeout(kAnimTimer);
+  if (!kStrokes.length) return;
+  kStrokeCur = 0;
+  function step() { kStrokeCur++; renderStrokes(kStrokeCur); if (kStrokeCur < kStrokes.length) kAnimTimer = setTimeout(step, 500); }
+  step();
+}
+
+function openKanji(i) {
+  clearTimeout(kAnimTimer);
+  selIdx = i;
+  const k = KANJI[i];
+  document.getElementById('k-mean').textContent = k.m;
+  document.getElementById('k-on').textContent = k.on;
+  document.getElementById('k-kun').textContent = k.kun;
+  document.getElementById('k-s').textContent = k.s;
+  document.getElementById('k-rads').innerHTML = k.r.map(r => `<span class="rad">${r}</span>`).join('');
+  const learned = !!ST.learned[i];
+  const mb = document.getElementById('mark-btn');
+  mb.textContent = learned ? 'Снять отметку' : 'Отметить как выученный';
+  mb.className = 'mark-btn ' + (learned ? 'unlearn' : 'learn');
+  document.getElementById('k-panel').style.display = 'block';
+  document.getElementById('k-panel').scrollIntoView({behavior:'smooth', block:'nearest'});
+  loadSVG(k.k);
+  renderGrid();
+}
+
+function toggleLearned() {
+  if (selIdx === null) return;
+  ST.learned[selIdx] = !ST.learned[selIdx];
+  saveState();
+  openKanji(selIdx);
+  updateProgress();
+}
+
+function setFilter(f, btn) {
+  kFilter = f;
+  document.getElementById('k-search').value = '';
+  document.querySelectorAll('.k-filter').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderGrid();
+}
+
+function renderGrid() {
+  const q = document.getElementById('k-search').value.toLowerCase();
+  const grid = document.getElementById('k-grid');
+  grid.innerHTML = '';
+  let shown = 0;
+  KANJI.forEach((k, i) => {
+    const learned = !!ST.learned[i];
+    let pass = true;
+    if (q) pass = k.k.includes(q) || k.m.toLowerCase().includes(q);
+    else if (kFilter === 'new') pass = !learned;
+    else if (kFilter === 'done') pass = learned;
+    else if (kFilter === 'easy') pass = k.s <= 4;
+    else if (kFilter === 'hard') pass = k.s >= 8;
+    if (!pass) return;
+    shown++;
+    const t = document.createElement('div');
+    t.className = 'k-tile' + (learned ? ' learned' : '') + (selIdx === i ? ' sel' : '');
+    t.textContent = k.k;
+    t.title = k.m;
+    t.onclick = () => openKanji(i);
+    grid.appendChild(t);
+  });
+  const lbl = Object.values(ST.learned).filter(Boolean).length;
+  document.getElementById('grid-label').textContent = `Показано: ${shown} · Выучено: ${lbl} из ${KANJI.length}`;
+}
+
+// ===================== VOCAB =====================
+function renderVocab() {
+  const list = document.getElementById('vocab-list');
+  if (list.children.length) return;
+  document.getElementById('vocab-label').textContent = `Словарь N5 — ${VOCAB.length} слов`;
+  VOCAB.forEach(v => {
+    const d = document.createElement('div');
+    d.className = 'vocab-card';
+    d.innerHTML = `<div class="vocab-jp">${v.jp}</div><div style="flex:1"><div class="vocab-reading">${v.r}</div><div class="vocab-meaning">${v.m}</div></div><span class="vocab-tag">${v.t}</span>`;
+    list.appendChild(d);
+  });
+}
+
+// ===================== GRAMMAR =====================
+function renderGrammar() {
+  const list = document.getElementById('grammar-list');
+  if (list.children.length) return;
+  GRAMMAR.forEach(g => {
+    const d = document.createElement('div');
+    d.className = 'g-card';
+    const exHTML = g.ex.map(e => `<div class="g-ex"><div class="g-ex-jp">${e.jp}</div><div class="g-ex-ru">${e.ru}</div></div>`).join('');
+    d.innerHTML = `<div class="g-head"><span class="g-pattern">${g.p}</span><span class="g-lvl">${g.l}</span></div><div class="g-meaning">${g.m}</div><div class="g-body">${exHTML}</div>`;
+    d.onclick = () => d.classList.toggle('open');
+    list.appendChild(d);
+  });
+}
+
+// ===================== NAV =====================
+function showTab(id, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'kanji') renderGrid();
+  if (id === 'vocab') renderVocab();
+  if (id === 'grammar') renderGrammar();
+}
+
+function updateProgress() {
+  const n = Object.values(ST.learned).filter(Boolean).length;
+  document.getElementById('main-prog').style.width = Math.round(n / KANJI.length * 100) + '%';
+}
+
+// Init
+buildQueue();
+updateProgress();
+renderGrid();
+</script>
+</body>
+</html>
