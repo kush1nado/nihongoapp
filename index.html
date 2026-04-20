@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>日本語 — Изучение японского</title>
+<title>日本語</title>
 <meta name="theme-color" content="#ffffff">
 <style>
 :root{
@@ -17,45 +17,81 @@
   --obg:#FFF3E0;--otxt:#E65100;--obrd:#FFB74D;
   --r8:8px;--r12:12px;--r16:16px;
 }
-@media(prefers-color-scheme:dark){
-  :root{
-    --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--text:#f0f0f0;--text2:#aeaeb2;--text3:#6e6e73;
-    --border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.22);
-    --gbg:#173404;--gtxt:#C0DD97;--gbrd:#3B6D11;
-    --bbg:#042C53;--btxt:#B5D4F4;--bbrd:#185FA5;
-    --rbg:#501313;--rtxt:#F7C1C1;--rbrd:#A32D2D;
-    --abg:#412402;--atxt:#FAC775;
-    --pbg:#26215C;--ptxt:#CECBF6;
-    --obg:#3E2000;--otxt:#FFB74D;--obrd:#E65100;
-  }
-}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--text:#f0f0f0;--text2:#aeaeb2;--text3:#6e6e73;
+  --border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.22);
+  --gbg:#173404;--gtxt:#C0DD97;--gbrd:#3B6D11;
+  --bbg:#042C53;--btxt:#B5D4F4;--bbrd:#185FA5;
+  --rbg:#501313;--rtxt:#F7C1C1;--rbrd:#A32D2D;
+  --abg:#412402;--atxt:#FAC775;--pbg:#26215C;--ptxt:#CECBF6;
+  --obg:#3E2000;--otxt:#FFB74D;--obrd:#E65100;
+}}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;}
 .app{max-width:480px;margin:0 auto;background:var(--bg3);min-height:100vh;}
+
+/* Header */
 .header{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 16px 8px;position:sticky;top:0;z-index:20;}
-.hrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.htitle{font-size:20px;font-weight:600;}
-.hbadges{display:flex;gap:6px;}
-.badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;}
-.badge-g{background:var(--gbg);color:var(--gtxt);}
-.badge-b{background:var(--bbg);color:var(--btxt);}
+.hrow{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.htitle{font-size:20px;font-weight:600;flex:1;}
+.hlvl-badge{font-size:12px;padding:4px 10px;border-radius:20px;font-weight:600;cursor:pointer;transition:opacity .15s;}
+.hlvl-badge:active{opacity:.7;}
+.hlvl-n5{background:#E6F1FB;color:#185FA5;}
+.hlvl-n4{background:#EAF3DE;color:#3B6D11;}
+.hlvl-n3{background:#FAEEDA;color:#854F0B;}
+.hset-btn{width:34px;height:34px;border-radius:50%;border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .gsearch-wrap{position:relative;margin-bottom:6px;}
-.gsearch{width:100%;padding:8px 34px 8px 12px;border:0.5px solid var(--border);border-radius:var(--r8);font-size:14px;background:var(--bg2);color:var(--text);outline:none;transition:border-color .15s;}
+.gsearch{width:100%;padding:8px 34px 8px 12px;border:0.5px solid var(--border);border-radius:var(--r8);font-size:14px;background:var(--bg2);color:var(--text);outline:none;}
 .gsearch:focus{border-color:var(--green);background:var(--bg);}
-.gclear{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px;cursor:pointer;display:none;background:none;border:none;padding:0;}
+.gclear{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px;cursor:pointer;background:none;border:none;padding:0;display:none;}
 .prog-bar{height:3px;background:var(--bg3);border-radius:2px;}
-.prog-fill{height:100%;border-radius:2px;background:var(--green);transition:width .4s;}
+.prog-fill{height:100%;border-radius:2px;transition:width .4s;}
+.prog-fill.n5{background:#185FA5;}
+.prog-fill.n4{background:var(--green);}
+.prog-fill.n3{background:#854F0B;}
+
+/* Nav */
 .nav{display:flex;background:var(--bg);border-bottom:0.5px solid var(--border);}
 .nav-btn{flex:1;padding:10px 2px;border:none;background:transparent;color:var(--text2);font-size:10px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
 .nav-btn.active{color:var(--green);border-bottom-color:var(--green);}
+
 .screen{display:none;padding:14px 16px;}
 .screen.active{display:block;}
 .sec-label{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px;}
 
+/* Settings modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:50;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--bg);border-radius:var(--r16) var(--r16) 0 0;padding:20px 20px 32px;width:100%;max-width:480px;transform:translateY(100%);transition:transform .25s ease;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-title{font-size:17px;font-weight:600;margin-bottom:4px;}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px;}
+.modal-drag{width:36px;height:4px;background:var(--bg3);border-radius:2px;margin:0 auto 16px;}
+
+.lvl-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.lvl-card{border:0.5px solid var(--border);border-radius:var(--r12);padding:14px;cursor:pointer;transition:all .15s;position:relative;}
+.lvl-card.active-lvl{border-width:2px;}
+.lvl-card.locked{opacity:.5;cursor:default;}
+.lvl-card-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.lvl-icon{font-size:20px;}
+.lvl-name{font-size:15px;font-weight:600;}
+.lvl-status{margin-left:auto;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;}
+.lvl-desc{font-size:12px;color:var(--text2);margin-bottom:8px;}
+.lvl-prog-row{display:flex;align-items:center;gap:8px;}
+.lvl-prog-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;}
+.lvl-prog-fill{height:100%;border-radius:2px;transition:width .3s;}
+.lvl-prog-txt{font-size:11px;color:var(--text2);white-space:nowrap;}
+.lvl-actions{display:flex;gap:8px;margin-top:10px;}
+.lvl-btn{flex:1;padding:7px;border-radius:var(--r8);font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--border);}
+.lvl-btn.primary{background:var(--green);color:#fff;border-color:var(--green);}
+.lvl-btn.skip{background:var(--bg2);color:var(--text2);}
+.lvl-btn:active{opacity:.7;}
+.modal-close{width:100%;padding:12px;border-radius:var(--r12);border:0.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:14px;font-weight:500;cursor:pointer;margin-top:4px;}
+
 /* Search results */
 .search-results{padding:12px 16px;display:none;}
 .sr-section{margin-bottom:14px;}
-.sr-label{font-size:11px;font-weight:500;color:var(--text3);margin-bottom:6px;letter-spacing:.4px;}
+.sr-label{font-size:11px;font-weight:500;color:var(--text3);margin-bottom:6px;}
 .sr-item{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r8);padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer;}
 .sr-item:active{opacity:.7;}
 .sr-jp{font-size:22px;min-width:38px;}
@@ -67,7 +103,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* SRS */
 .flashcard{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r16);padding:28px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:195px;position:relative;user-select:none;margin-bottom:12px;}
 .fc-tag{position:absolute;top:11px;left:13px;font-size:10px;padding:2px 8px;border-radius:20px;background:var(--bbg);color:var(--btxt);font-weight:500;}
-.fc-cnt{position:absolute;top:11px;right:13px;font-size:10px;color:var(--text3);}
+.fc-lvl{position:absolute;top:11px;right:13px;font-size:10px;color:var(--text3);}
 .fc-k{font-size:76px;line-height:1;margin-bottom:8px;}
 .fc-r{font-size:17px;color:var(--text2);margin-bottom:5px;display:none;}
 .fc-m{font-size:15px;font-weight:500;display:none;}
@@ -119,26 +155,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .k-tile.learned{background:var(--gbg);border-color:var(--gbrd);}
 .k-tile.sel{border:2px solid var(--green);}
 
-/* Vocab */
-.vocab-search{width:100%;padding:8px 12px;border:0.5px solid var(--border);border-radius:var(--r8);font-size:13px;background:var(--bg);color:var(--text);margin-bottom:9px;outline:none;}
-.vocab-search:focus{border-color:var(--green);}
-.vocab-filters{display:flex;gap:5px;margin-bottom:9px;flex-wrap:wrap;}
-.vf-btn{padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--bg);color:var(--text2);font-size:11px;cursor:pointer;font-weight:500;}
-.vf-btn.on{background:var(--bbg);color:var(--btxt);border-color:var(--bbrd);}
-.vocab-list{display:flex;flex-direction:column;gap:7px;}
-.vocab-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r12);padding:11px 13px;display:flex;align-items:center;gap:11px;}
-.vjp{font-size:24px;min-width:50px;}
-.vread{font-size:11px;color:var(--text2);}
-.vmean{font-size:14px;font-weight:500;}
-.vtag{font-size:9px;padding:2px 6px;background:var(--pbg);color:var(--ptxt);border-radius:4px;white-space:nowrap;margin-left:auto;}
-.vempty{text-align:center;padding:2rem;color:var(--text2);font-size:13px;}
-
 /* Grammar */
 .grammar-list{display:flex;flex-direction:column;gap:7px;}
 .g-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r12);padding:13px;cursor:pointer;}
-.g-head{display:flex;justify-content:space-between;align-items:center;}
-.g-pattern{font-size:15px;font-weight:600;}
-.g-lvl{font-size:10px;padding:2px 7px;background:var(--abg);color:var(--atxt);border-radius:4px;font-weight:500;}
+.g-head{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.g-pattern{font-size:14px;font-weight:600;}
+.g-lvl{font-size:10px;padding:2px 7px;background:var(--abg);color:var(--atxt);border-radius:4px;font-weight:500;white-space:nowrap;}
+.g-lvl.n4{background:var(--gbg);color:var(--gtxt);}
+.g-lvl.n3{background:var(--obg);color:var(--otxt);}
 .g-meaning{font-size:12px;color:var(--text2);margin-top:3px;}
 .g-body{display:none;margin-top:11px;border-top:0.5px solid var(--border);padding-top:11px;}
 .g-card.open .g-body{display:block;}
@@ -148,7 +172,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* Exceptions */
 .exc-section{margin-bottom:18px;}
-.exc-title{font-size:14px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.exc-title{font-size:14px;font-weight:600;margin-bottom:10px;}
 .exc-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r12);padding:12px 14px;margin-bottom:7px;cursor:pointer;}
 .exc-card.open .exc-body{display:block;}
 .exc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
@@ -168,7 +192,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .exc-eg .jp{font-size:14px;font-weight:500;}
 .exc-eg .ru{font-size:12px;color:var(--text2);}
 
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gbg);color:var(--gtxt);border:0.5px solid var(--gbrd);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;z-index:100;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gbg);color:var(--gtxt);border:0.5px solid var(--gbrd);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;z-index:200;}
 .toast.show{opacity:1;}
 .svg-loading{font-size:12px;color:var(--text3);text-align:center;}
 .svg-fallback{font-size:60px;text-align:center;}
@@ -177,29 +201,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <body>
 <div class="app">
 
+<!-- Header -->
 <div class="header">
   <div class="hrow">
     <span class="htitle">日本語</span>
-    <div class="hbadges">
-      <span class="badge badge-g" id="streak-badge">🔥 0 дней</span>
-      <span class="badge badge-b">N5</span>
-    </div>
+    <span class="hlvl-badge" id="hlvl" onclick="openSettings()">N5</span>
+    <button class="hset-btn" onclick="openSettings()" title="Настройки">⚙️</button>
   </div>
   <div class="gsearch-wrap">
     <input class="gsearch" id="gsearch" placeholder="🔍  Поиск кандзи и слов..." oninput="globalSearch(this.value)">
     <button class="gclear" id="gclear" onclick="clearSearch()">✕</button>
   </div>
-  <div class="prog-bar"><div class="prog-fill" id="main-prog" style="width:0%"></div></div>
+  <div class="prog-bar"><div class="prog-fill n5" id="main-prog" style="width:0%"></div></div>
 </div>
 
+<!-- Nav -->
 <nav class="nav">
   <button class="nav-btn active" onclick="showTab('srs',this)">Карточки</button>
   <button class="nav-btn" onclick="showTab('kanji',this)">漢字</button>
-  <button class="nav-btn" onclick="showTab('vocab',this)">Слова</button>
   <button class="nav-btn" onclick="showTab('grammar',this)">Грамм.</button>
   <button class="nav-btn" onclick="showTab('exc',this)">⚠️ Искл.</button>
 </nav>
 
+<!-- Search results -->
 <div class="search-results" id="search-results"></div>
 
 <!-- SRS -->
@@ -207,7 +231,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div id="card-area">
     <div class="flashcard" id="fc" onclick="flipCard()">
       <div class="fc-tag" id="fc-tag"></div>
-      <div class="fc-cnt" id="fc-cnt"></div>
+      <div class="fc-lvl" id="fc-lvl"></div>
       <div class="fc-k" id="fc-k"></div>
       <div class="fc-r" id="fc-r"></div>
       <div class="fc-m" id="fc-m"></div>
@@ -261,267 +285,538 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="kanji-grid" id="k-grid"></div>
 </div>
 
-<!-- Vocab -->
-<div class="screen" id="tab-vocab">
-  <input class="vocab-search" id="vocab-search" placeholder="Поиск слова, чтения или перевода..." oninput="renderVocab()">
-  <div class="vocab-filters">
-    <button class="vf-btn on" onclick="setVFilter('all',this)">Все</button>
-    <button class="vf-btn" onclick="setVFilter('глагол',this)">Глаголы</button>
-    <button class="vf-btn" onclick="setVFilter('прилаг',this)">Прилаг.</button>
-    <button class="vf-btn" onclick="setVFilter('N5',this)">Сущ. N5</button>
-  </div>
-  <div class="sec-label" id="vocab-label"></div>
-  <div class="vocab-list" id="vocab-list"></div>
-</div>
-
 <!-- Grammar -->
 <div class="screen" id="tab-grammar">
-  <div class="sec-label">Основные паттерны N5</div>
+  <div class="k-filters" id="g-filters">
+    <button class="k-filter on" onclick="setGFilter('all',this)">Все уровни</button>
+    <button class="k-filter" onclick="setGFilter('N5',this)">N5</button>
+    <button class="k-filter" onclick="setGFilter('N4',this)">N4</button>
+    <button class="k-filter" onclick="setGFilter('N3',this)">N3</button>
+  </div>
   <div class="grammar-list" id="grammar-list"></div>
 </div>
 
 <!-- Exceptions -->
 <div class="screen" id="tab-exc">
-  <div class="exc-section">
-    <div class="exc-title">🪤 Слова-ловушки</div>
-    <div id="exc-traps"></div>
-  </div>
-  <div class="exc-section">
-    <div class="exc-title">🔀 Нерегулярные глаголы</div>
-    <div id="exc-irreg"></div>
-  </div>
-  <div class="exc-section">
-    <div class="exc-title">📌 Правила с исключениями</div>
-    <div id="exc-rules"></div>
-  </div>
+  <div class="exc-section"><div class="exc-title">🪤 Слова-ловушки</div><div id="exc-traps"></div></div>
+  <div class="exc-section"><div class="exc-title">🔀 Нерегулярные глаголы</div><div id="exc-irreg"></div></div>
+  <div class="exc-section"><div class="exc-title">📌 Правила с исключениями</div><div id="exc-rules"></div></div>
 </div>
 
 </div>
-<div class="toast" id="toast">✓ сохранено</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-title">Уровень обучения</div>
+    <div class="modal-sub">Выбери активный уровень или разблокируй любой вручную</div>
+    <div class="lvl-cards" id="lvl-cards"></div>
+    <button class="modal-close" onclick="closeSettings()">Готово</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-const KANJI=[
-  {k:'日',m:'день/солнце',on:'ニチ、ジツ',kun:'ひ、か',s:4,r:['日']},
-  {k:'月',m:'луна/месяц',on:'ゲツ、ガツ',kun:'つき',s:4,r:['月']},
-  {k:'火',m:'огонь',on:'カ',kun:'ひ',s:4,r:['火']},
-  {k:'水',m:'вода',on:'スイ',kun:'みず',s:4,r:['水']},
-  {k:'木',m:'дерево',on:'モク、ボク',kun:'き',s:4,r:['木']},
-  {k:'金',m:'золото/деньги',on:'キン、コン',kun:'かね',s:8,r:['人','王']},
-  {k:'土',m:'земля',on:'ド、ト',kun:'つち',s:3,r:['土']},
-  {k:'山',m:'гора',on:'サン',kun:'やま',s:3,r:['山']},
-  {k:'川',m:'река',on:'セン',kun:'かわ',s:3,r:['川']},
-  {k:'人',m:'человек',on:'ジン、ニン',kun:'ひと',s:2,r:['人']},
-  {k:'口',m:'рот',on:'コウ、ク',kun:'くち',s:3,r:['口']},
-  {k:'手',m:'рука',on:'シュ',kun:'て',s:4,r:['手']},
-  {k:'目',m:'глаз',on:'モク、ボク',kun:'め',s:5,r:['目']},
-  {k:'耳',m:'ухо',on:'ジ',kun:'みみ',s:6,r:['耳']},
-  {k:'足',m:'нога',on:'ソク',kun:'あし',s:7,r:['口','止']},
-  {k:'力',m:'сила',on:'リョク、リキ',kun:'ちから',s:2,r:['力']},
-  {k:'大',m:'большой',on:'ダイ、タイ',kun:'おお',s:3,r:['大']},
-  {k:'小',m:'маленький',on:'ショウ',kun:'ちい',s:3,r:['小']},
-  {k:'中',m:'середина',on:'チュウ',kun:'なか',s:4,r:['口']},
-  {k:'上',m:'верх',on:'ジョウ',kun:'うえ',s:3,r:['上']},
-  {k:'下',m:'низ',on:'カ、ゲ',kun:'した',s:3,r:['下']},
-  {k:'左',m:'левый',on:'サ',kun:'ひだり',s:5,r:['工','又']},
-  {k:'右',m:'правый',on:'ウ、ユウ',kun:'みぎ',s:5,r:['口','又']},
-  {k:'国',m:'страна',on:'コク',kun:'くに',s:8,r:['囗','玉']},
-  {k:'語',m:'язык/слово',on:'ゴ',kun:'かた',s:14,r:['言','吾']},
-  {k:'学',m:'учёба',on:'ガク',kun:'まな',s:8,r:['子']},
-  {k:'生',m:'жизнь/родиться',on:'セイ、ショウ',kun:'い、う',s:5,r:['生']},
-  {k:'先',m:'впереди/раньше',on:'セン',kun:'さき',s:6,r:['生','儿']},
-  {k:'年',m:'год',on:'ネン',kun:'とし',s:6,r:['年']},
-  {k:'時',m:'время/час',on:'ジ',kun:'とき',s:10,r:['日','寺']},
-  {k:'間',m:'между',on:'カン、ケン',kun:'ま、あいだ',s:12,r:['門','日']},
-  {k:'本',m:'книга/основа',on:'ホン',kun:'もと',s:5,r:['木']},
-  {k:'文',m:'текст/письмо',on:'ブン、モン',kun:'ふみ',s:4,r:['文']},
-  {k:'字',m:'иероглиф/буква',on:'ジ',kun:'あざ',s:6,r:['宀','子']},
-  {k:'名',m:'имя',on:'メイ、ミョウ',kun:'な',s:6,r:['夕','口']},
-  {k:'白',m:'белый',on:'ハク',kun:'しろ',s:5,r:['白']},
-  {k:'百',m:'сто',on:'ヒャク',kun:'—',s:6,r:['白']},
-  {k:'千',m:'тысяча',on:'セン',kun:'ち',s:3,r:['千']},
-  {k:'万',m:'десять тысяч',on:'マン',kun:'—',s:3,r:['万']},
-  {k:'円',m:'иена/круг',on:'エン',kun:'まる',s:4,r:['円']},
-  {k:'何',m:'что/сколько',on:'カ',kun:'なに、なん',s:7,r:['人','可']},
-  {k:'今',m:'сейчас',on:'コン、キン',kun:'いま',s:4,r:['亼']},
-  {k:'来',m:'приходить',on:'ライ',kun:'く',s:7,r:['来']},
-  {k:'行',m:'идти',on:'コウ、ギョウ',kun:'い、ゆ',s:6,r:['彳']},
-  {k:'見',m:'видеть',on:'ケン',kun:'み',s:7,r:['目','儿']},
-  {k:'聞',m:'слышать/спрашивать',on:'ブン、モン',kun:'き',s:14,r:['門','耳']},
-  {k:'言',m:'говорить',on:'ゲン、ゴン',kun:'い',s:7,r:['言']},
-  {k:'読',m:'читать',on:'ドク',kun:'よ',s:14,r:['言']},
-  {k:'書',m:'писать',on:'ショ',kun:'か',s:10,r:['聿']},
-  {k:'食',m:'еда/есть',on:'ショク',kun:'た',s:9,r:['亼','良']},
-  {k:'飲',m:'пить',on:'イン',kun:'の',s:12,r:['食']},
-  {k:'買',m:'покупать',on:'バイ',kun:'か',s:12,r:['罒','貝']},
-  {k:'出',m:'выходить',on:'シュツ',kun:'で',s:5,r:['出']},
-  {k:'入',m:'входить',on:'ニュウ',kun:'い',s:2,r:['入']},
-  {k:'会',m:'встречать',on:'カイ',kun:'あ',s:6,r:['亼']},
-  {k:'話',m:'разговор',on:'ワ',kun:'はな',s:13,r:['言','舌']},
-  {k:'電',m:'электричество',on:'デン',kun:'—',s:13,r:['雨']},
-  {k:'車',m:'машина',on:'シャ',kun:'くるま',s:7,r:['車']},
-  {k:'駅',m:'станция',on:'エキ',kun:'—',s:14,r:['馬']},
-  {k:'道',m:'дорога/путь',on:'ドウ',kun:'みち',s:12,r:['辶','首']},
-  {k:'東',m:'восток',on:'トウ',kun:'ひがし',s:8,r:['木','日']},
-  {k:'西',m:'запад',on:'セイ',kun:'にし',s:6,r:['西']},
-  {k:'南',m:'юг',on:'ナン',kun:'みなみ',s:9,r:['十']},
-  {k:'北',m:'север',on:'ホク',kun:'きた',s:5,r:['北']},
-  {k:'外',m:'снаружи',on:'ガイ',kun:'そと',s:5,r:['夕']},
-  {k:'内',m:'внутри',on:'ナイ',kun:'うち',s:4,r:['冂']},
-  {k:'前',m:'перед/раньше',on:'ゼン',kun:'まえ',s:9,r:['前']},
-  {k:'後',m:'после/сзади',on:'ゴ、コウ',kun:'あと',s:9,r:['彳']},
-  {k:'新',m:'новый',on:'シン',kun:'あたら',s:13,r:['立','木','斤']},
-  {k:'古',m:'старый',on:'コ',kun:'ふる',s:5,r:['十','口']},
-  {k:'高',m:'высокий/дорогой',on:'コウ',kun:'たか',s:10,r:['高']},
-  {k:'長',m:'длинный',on:'チョウ',kun:'なが',s:8,r:['長']},
-  {k:'好',m:'нравиться',on:'コウ',kun:'す',s:6,r:['女','子']},
-  {k:'友',m:'друг',on:'ユウ',kun:'とも',s:4,r:['又']},
-  {k:'父',m:'отец',on:'フ',kun:'ちち',s:4,r:['父']},
-  {k:'母',m:'мать',on:'ボ',kun:'はは',s:5,r:['母']},
-  {k:'子',m:'ребёнок',on:'シ、ス',kun:'こ',s:3,r:['子']},
-  {k:'女',m:'женщина',on:'ジョ',kun:'おんな',s:3,r:['女']},
-  {k:'男',m:'мужчина',on:'ダン',kun:'おとこ',s:7,r:['田','力']},
-  {k:'花',m:'цветок',on:'カ',kun:'はな',s:7,r:['艹','化']},
-  {k:'犬',m:'собака',on:'ケン',kun:'いぬ',s:4,r:['犬']},
-  {k:'魚',m:'рыба',on:'ギョ',kun:'さかな',s:11,r:['魚']},
-];
+// ===== ALL KANJI DATA by level =====
+const KANJI = {
+  N5: [
+    {k:'日',m:'день/солнце',on:'ニチ、ジツ',kun:'ひ、か',s:4,r:['日']},
+    {k:'月',m:'луна/месяц',on:'ゲツ、ガツ',kun:'つき',s:4,r:['月']},
+    {k:'火',m:'огонь',on:'カ',kun:'ひ',s:4,r:['火']},
+    {k:'水',m:'вода',on:'スイ',kun:'みず',s:4,r:['水']},
+    {k:'木',m:'дерево',on:'モク、ボク',kun:'き',s:4,r:['木']},
+    {k:'金',m:'золото/деньги',on:'キン、コン',kun:'かね',s:8,r:['人','王']},
+    {k:'土',m:'земля',on:'ド、ト',kun:'つち',s:3,r:['土']},
+    {k:'山',m:'гора',on:'サン',kun:'やま',s:3,r:['山']},
+    {k:'川',m:'река',on:'セン',kun:'かわ',s:3,r:['川']},
+    {k:'人',m:'человек',on:'ジン、ニン',kun:'ひと',s:2,r:['人']},
+    {k:'口',m:'рот',on:'コウ、ク',kun:'くち',s:3,r:['口']},
+    {k:'手',m:'рука',on:'シュ',kun:'て',s:4,r:['手']},
+    {k:'目',m:'глаз',on:'モク、ボク',kun:'め',s:5,r:['目']},
+    {k:'耳',m:'ухо',on:'ジ',kun:'みみ',s:6,r:['耳']},
+    {k:'足',m:'нога',on:'ソク',kun:'あし',s:7,r:['口','止']},
+    {k:'力',m:'сила',on:'リョク',kun:'ちから',s:2,r:['力']},
+    {k:'大',m:'большой',on:'ダイ、タイ',kun:'おお',s:3,r:['大']},
+    {k:'小',m:'маленький',on:'ショウ',kun:'ちい',s:3,r:['小']},
+    {k:'中',m:'середина',on:'チュウ',kun:'なか',s:4,r:['口']},
+    {k:'上',m:'верх',on:'ジョウ',kun:'うえ',s:3,r:['上']},
+    {k:'下',m:'низ',on:'カ、ゲ',kun:'した',s:3,r:['下']},
+    {k:'左',m:'левый',on:'サ',kun:'ひだり',s:5,r:['工','又']},
+    {k:'右',m:'правый',on:'ウ、ユウ',kun:'みぎ',s:5,r:['口','又']},
+    {k:'国',m:'страна',on:'コク',kun:'くに',s:8,r:['囗','玉']},
+    {k:'語',m:'язык/слово',on:'ゴ',kun:'かた',s:14,r:['言','吾']},
+    {k:'学',m:'учёба',on:'ガク',kun:'まな',s:8,r:['子']},
+    {k:'生',m:'жизнь/родиться',on:'セイ',kun:'い、う',s:5,r:['生']},
+    {k:'先',m:'впереди/раньше',on:'セン',kun:'さき',s:6,r:['生','儿']},
+    {k:'年',m:'год',on:'ネン',kun:'とし',s:6,r:['年']},
+    {k:'時',m:'время/час',on:'ジ',kun:'とき',s:10,r:['日','寺']},
+    {k:'間',m:'между',on:'カン',kun:'ま、あいだ',s:12,r:['門','日']},
+    {k:'本',m:'книга/основа',on:'ホン',kun:'もと',s:5,r:['木']},
+    {k:'文',m:'текст/письмо',on:'ブン',kun:'ふみ',s:4,r:['文']},
+    {k:'字',m:'иероглиф/буква',on:'ジ',kun:'あざ',s:6,r:['宀','子']},
+    {k:'名',m:'имя',on:'メイ',kun:'な',s:6,r:['夕','口']},
+    {k:'白',m:'белый',on:'ハク',kun:'しろ',s:5,r:['白']},
+    {k:'百',m:'сто',on:'ヒャク',kun:'—',s:6,r:['白']},
+    {k:'千',m:'тысяча',on:'セン',kun:'ち',s:3,r:['千']},
+    {k:'万',m:'десять тысяч',on:'マン',kun:'—',s:3,r:['万']},
+    {k:'円',m:'иена/круг',on:'エン',kun:'まる',s:4,r:['円']},
+    {k:'何',m:'что/сколько',on:'カ',kun:'なに',s:7,r:['人','可']},
+    {k:'今',m:'сейчас',on:'コン',kun:'いま',s:4,r:['亼']},
+    {k:'来',m:'приходить',on:'ライ',kun:'く',s:7,r:['来']},
+    {k:'行',m:'идти',on:'コウ',kun:'い、ゆ',s:6,r:['彳']},
+    {k:'見',m:'видеть',on:'ケン',kun:'み',s:7,r:['目','儿']},
+    {k:'聞',m:'слышать',on:'ブン',kun:'き',s:14,r:['門','耳']},
+    {k:'言',m:'говорить',on:'ゲン',kun:'い',s:7,r:['言']},
+    {k:'読',m:'читать',on:'ドク',kun:'よ',s:14,r:['言']},
+    {k:'書',m:'писать',on:'ショ',kun:'か',s:10,r:['聿']},
+    {k:'食',m:'еда/есть',on:'ショク',kun:'た',s:9,r:['亼','良']},
+    {k:'飲',m:'пить',on:'イン',kun:'の',s:12,r:['食']},
+    {k:'買',m:'покупать',on:'バイ',kun:'か',s:12,r:['罒','貝']},
+    {k:'出',m:'выходить',on:'シュツ',kun:'で',s:5,r:['出']},
+    {k:'入',m:'входить',on:'ニュウ',kun:'い',s:2,r:['入']},
+    {k:'会',m:'встречать',on:'カイ',kun:'あ',s:6,r:['亼']},
+    {k:'話',m:'разговор',on:'ワ',kun:'はな',s:13,r:['言','舌']},
+    {k:'電',m:'электричество',on:'デン',kun:'—',s:13,r:['雨']},
+    {k:'車',m:'машина',on:'シャ',kun:'くるま',s:7,r:['車']},
+    {k:'駅',m:'станция',on:'エキ',kun:'—',s:14,r:['馬']},
+    {k:'道',m:'дорога/путь',on:'ドウ',kun:'みち',s:12,r:['辶','首']},
+    {k:'東',m:'восток',on:'トウ',kun:'ひがし',s:8,r:['木','日']},
+    {k:'西',m:'запад',on:'セイ',kun:'にし',s:6,r:['西']},
+    {k:'南',m:'юг',on:'ナン',kun:'みなみ',s:9,r:['十']},
+    {k:'北',m:'север',on:'ホク',kun:'きた',s:5,r:['北']},
+    {k:'外',m:'снаружи',on:'ガイ',kun:'そと',s:5,r:['夕']},
+    {k:'内',m:'внутри',on:'ナイ',kun:'うち',s:4,r:['冂']},
+    {k:'前',m:'перед',on:'ゼン',kun:'まえ',s:9,r:['前']},
+    {k:'後',m:'после',on:'ゴ',kun:'あと',s:9,r:['彳']},
+    {k:'新',m:'новый',on:'シン',kun:'あたら',s:13,r:['立','木','斤']},
+    {k:'古',m:'старый',on:'コ',kun:'ふる',s:5,r:['十','口']},
+    {k:'高',m:'высокий/дорогой',on:'コウ',kun:'たか',s:10,r:['高']},
+    {k:'長',m:'длинный',on:'チョウ',kun:'なが',s:8,r:['長']},
+    {k:'好',m:'нравиться',on:'コウ',kun:'す',s:6,r:['女','子']},
+    {k:'友',m:'друг',on:'ユウ',kun:'とも',s:4,r:['又']},
+    {k:'父',m:'отец',on:'フ',kun:'ちち',s:4,r:['父']},
+    {k:'母',m:'мать',on:'ボ',kun:'はは',s:5,r:['母']},
+    {k:'子',m:'ребёнок',on:'シ',kun:'こ',s:3,r:['子']},
+    {k:'女',m:'женщина',on:'ジョ',kun:'おんな',s:3,r:['女']},
+    {k:'男',m:'мужчина',on:'ダン',kun:'おとこ',s:7,r:['田','力']},
+    {k:'花',m:'цветок',on:'カ',kun:'はな',s:7,r:['艹','化']},
+    {k:'犬',m:'собака',on:'ケン',kun:'いぬ',s:4,r:['犬']},
+    {k:'魚',m:'рыба',on:'ギョ',kun:'さかな',s:11,r:['魚']},
+  ],
+  N4: [
+    {k:'家',m:'дом/семья',on:'カ、ケ',kun:'いえ、うち',s:10,r:['宀','豕']},
+    {k:'社',m:'компания/общество',on:'シャ',kun:'やしろ',s:7,r:['示','土']},
+    {k:'会',m:'встреча/собрание',on:'カイ',kun:'あ',s:6,r:['亼','云']},
+    {k:'社会',m:'общество',on:'シャカイ',kun:'—',s:13,r:['示','土','亼']},
+    {k:'仕',m:'служить',on:'シ',kun:'つか',s:5,r:['人','士']},
+    {k:'事',m:'дело/вещь',on:'ジ、ズ',kun:'こと',s:8,r:['亅','口']},
+    {k:'気',m:'дух/воздух/настроение',on:'キ、ケ',kun:'き',s:6,r:['气','米']},
+    {k:'天',m:'небо',on:'テン',kun:'あま、あめ',s:4,r:['大']},
+    {k:'地',m:'земля/место',on:'チ、ジ',kun:'つち',s:6,r:['土','也']},
+    {k:'海',m:'море',on:'カイ',kun:'うみ',s:9,r:['水','毎']},
+    {k:'空',m:'небо/пустой',on:'クウ',kun:'そら、あ、から',s:8,r:['穴','工']},
+    {k:'雨',m:'дождь',on:'ウ',kun:'あめ、あま',s:8,r:['雨']},
+    {k:'雪',m:'снег',on:'セツ',kun:'ゆき',s:11,r:['雨','彐']},
+    {k:'風',m:'ветер',on:'フウ、フ',kun:'かぜ、かざ',s:9,r:['几','虫']},
+    {k:'春',m:'весна',on:'シュン',kun:'はる',s:9,r:['日','屯']},
+    {k:'夏',m:'лето',on:'カ、ゲ',kun:'なつ',s:10,r:['夂']},
+    {k:'秋',m:'осень',on:'シュウ',kun:'あき',s:9,r:['禾','火']},
+    {k:'冬',m:'зима',on:'トウ',kun:'ふゆ',s:5,r:['夂','仌']},
+    {k:'朝',m:'утро',on:'チョウ',kun:'あさ',s:12,r:['日','月']},
+    {k:'昼',m:'день (дневное время)',on:'チュウ',kun:'ひる',s:9,r:['尸','旦']},
+    {k:'夜',m:'ночь',on:'ヤ',kun:'よる、よ',s:8,r:['亠','夕']},
+    {k:'週',m:'неделя',on:'シュウ',kun:'—',s:11,r:['辶','周']},
+    {k:'曜',m:'день недели',on:'ヨウ',kun:'—',s:18,r:['日','隹']},
+    {k:'体',m:'тело',on:'タイ、テイ',kun:'からだ',s:7,r:['人','本']},
+    {k:'頭',m:'голова',on:'トウ、ズ、ト',kun:'あたま、かしら',s:16,r:['頁','豆']},
+    {k:'顔',m:'лицо',on:'ガン',kun:'かお',s:18,r:['頁','彦']},
+    {k:'心',m:'сердце/душа',on:'シン',kun:'こころ',s:4,r:['心']},
+    {k:'声',m:'голос',on:'セイ、ショウ',kun:'こえ',s:7,r:['士','殳']},
+    {k:'病',m:'болезнь',on:'ビョウ、ヘイ',kun:'やまい',s:10,r:['疒','丙']},
+    {k:'薬',m:'лекарство',on:'ヤク',kun:'くすり',s:16,r:['艹','楽']},
+    {k:'作',m:'делать/создавать',on:'サク、サ',kun:'つく',s:7,r:['人','乍']},
+    {k:'使',m:'использовать',on:'シ',kun:'つか',s:8,r:['人','吏']},
+    {k:'始',m:'начинать',on:'シ',kun:'はじ',s:8,r:['女','台']},
+    {k:'終',m:'заканчивать',on:'シュウ',kun:'お',s:11,r:['糸','冬']},
+    {k:'走',m:'бежать',on:'ソウ',kun:'はし',s:7,r:['走']},
+    {k:'立',m:'стоять/устанавливать',on:'リツ、リュウ',kun:'た',s:5,r:['立']},
+    {k:'思',m:'думать',on:'シ',kun:'おも',s:9,r:['田','心']},
+    {k:'知',m:'знать',on:'チ',kun:'し',s:8,r:['矢','口']},
+    {k:'教',m:'учить',on:'キョウ',kun:'おし、おそ',s:11,r:['孝','攴']},
+    {k:'習',m:'учиться/практиковать',on:'シュウ',kun:'なら',s:11,r:['羽','白']},
+    {k:'働',m:'работать',on:'ドウ',kun:'はたら',s:13,r:['人','動']},
+    {k:'休',m:'отдыхать',on:'キュウ',kun:'やす',s:6,r:['人','木']},
+    {k:'待',m:'ждать',on:'タイ',kun:'ま',s:9,r:['彳','寺']},
+    {k:'持',m:'держать',on:'ジ',kun:'も',s:9,r:['手','寺']},
+    {k:'起',m:'вставать/происходить',on:'キ',kun:'お',s:10,r:['走','己']},
+    {k:'送',m:'отправлять',on:'ソウ',kun:'おく',s:9,r:['辶','关']},
+    {k:'帰',m:'возвращаться',on:'キ',kun:'かえ',s:10,r:['巾','帚']},
+    {k:'急',m:'срочно/спешить',on:'キュウ',kun:'いそ',s:9,r:['心','急']},
+    {k:'安',m:'спокойный/дешёвый',on:'アン',kun:'やす',s:6,r:['宀','女']},
+    {k:'広',m:'широкий',on:'コウ',kun:'ひろ',s:5,r:['广']},
+    {k:'近',m:'близкий',on:'キン',kun:'ちか',s:7,r:['辶','斤']},
+    {k:'遠',m:'далёкий',on:'エン',kun:'とお',s:13,r:['辶','袁']},
+    {k:'多',m:'много',on:'タ',kun:'おお',s:6,r:['夕']},
+    {k:'少',m:'мало/немного',on:'ショウ',kun:'すく、すこ',s:4,r:['小']},
+    {k:'同',m:'одинаковый',on:'ドウ',kun:'おな',s:6,r:['冂','口']},
+    {k:'別',m:'другой/прощание',on:'ベツ',kun:'わか',s:7,r:['口','刀']},
+    {k:'場',m:'место/площадь',on:'ジョウ',kun:'ば',s:12,r:['土','昜']},
+    {k:'所',m:'место',on:'ショ',kun:'ところ',s:8,r:['戸','斤']},
+    {k:'店',m:'магазин',on:'テン',kun:'みせ',s:8,r:['广','占']},
+    {k:'町',m:'город/квартал',on:'チョウ',kun:'まち',s:7,r:['田','丁']},
+    {k:'室',m:'комната',on:'シツ',kun:'むろ',s:9,r:['宀','至']},
+    {k:'門',m:'ворота',on:'モン',kun:'かど',s:8,r:['門']},
+    {k:'図',m:'карта/план',on:'ズ、ト',kun:'はか',s:7,r:['囗','巴']},
+    {k:'切',m:'резать/важный',on:'セツ、サイ',kun:'き',s:4,r:['七','刀']},
+    {k:'以',m:'с/по (предлог)',on:'イ',kun:'もっ',s:5,r:['人','乚']},
+    {k:'開',m:'открывать',on:'カイ',kun:'あ、ひら',s:12,r:['門','开']},
+    {k:'閉',m:'закрывать',on:'ヘイ',kun:'し、と',s:11,r:['門','才']},
+    {k:'回',m:'раз/оборот',on:'カイ、エ',kun:'まわ',s:6,r:['囗','回']},
+    {k:'転',m:'катиться/менять',on:'テン',kun:'ころ',s:11,r:['車','云']},
+    {k:'乗',m:'ехать/садиться',on:'ジョウ',kun:'の',s:9,r:['丿','木']},
+    {k:'降',m:'спускаться/выходить',on:'コウ',kun:'お、ふ',s:10,r:['阜','夅']},
+    {k:'止',m:'остановиться',on:'シ',kun:'と、や',s:4,r:['止']},
+    {k:'方',m:'способ/направление/человек',on:'ホウ',kun:'かた',s:4,r:['方']},
+    {k:'意',m:'смысл/намерение',on:'イ',kun:'—',s:13,r:['音','心']},
+    {k:'味',m:'вкус',on:'ミ',kun:'あじ',s:8,r:['口','未']},
+    {k:'色',m:'цвет',on:'ショク、シキ',kun:'いろ',s:6,r:['色']},
+    {k:'形',m:'форма',on:'ケイ、ギョウ',kun:'かたち',s:7,r:['开','彡']},
+    {k:'重',m:'тяжёлый/важный',on:'ジュウ、チョウ',kun:'おも、かさ',s:9,r:['里']},
+    {k:'軽',m:'лёгкий',on:'ケイ',kun:'かる',s:12,r:['車','巠']},
+  ],
+  N3: [
+    {k:'政',m:'политика/правление',on:'セイ、ショウ',kun:'まつりごと',s:9,r:['攴','正']},
+    {k:'経',m:'пройти/экономика',on:'ケイ、キョウ',kun:'へ',s:11,r:['糸','巠']},
+    {k:'済',m:'закончить/экономить',on:'サイ',kun:'す',s:11,r:['水','斉']},
+    {k:'法',m:'закон/метод',on:'ホウ',kun:'—',s:8,r:['水','去']},
+    {k:'問',m:'вопрос/проблема',on:'モン',kun:'と',s:11,r:['門','口']},
+    {k:'題',m:'тема/заголовок',on:'ダイ',kun:'—',s:18,r:['頁','是']},
+    {k:'答',m:'ответ',on:'トウ',kun:'こた',s:12,r:['竹','合']},
+    {k:'考',m:'думать/рассматривать',on:'コウ',kun:'かんが',s:6,r:['耂','丂']},
+    {k:'調',m:'исследовать/настраивать',on:'チョウ',kun:'しら、ととの',s:15,r:['言','周']},
+    {k:'査',m:'проверять',on:'サ',kun:'—',s:9,r:['木','且']},
+    {k:'研',m:'полировать/исследовать',on:'ケン',kun:'と',s:9,r:['石','开']},
+    {k:'究',m:'изучать/исследовать',on:'キュウ',kun:'きわ',s:7,r:['穴','九']},
+    {k:'科',m:'предмет/наука',on:'カ',kun:'—',s:9,r:['禾','斗']},
+    {k:'業',m:'дело/профессия',on:'ギョウ、ゴウ',kun:'わざ',s:13,r:['木','業']},
+    {k:'産',m:'производить/рожать',on:'サン',kun:'う',s:11,r:['产','生']},
+    {k:'農',m:'сельское хозяйство',on:'ノウ',kun:'—',s:13,r:['曲','辰']},
+    {k:'商',m:'торговля/коммерция',on:'ショウ',kun:'あきな',s:11,r:['亠','冂']},
+    {k:'工',m:'работа/инженерия',on:'コウ、ク',kun:'—',s:3,r:['工']},
+    {k:'品',m:'товар/качество',on:'ヒン',kun:'しな',s:9,r:['口']},
+    {k:'物',m:'вещь/предмет',on:'ブツ、モツ',kun:'もの',s:8,r:['牛','勿']},
+    {k:'用',m:'использование/нужда',on:'ヨウ',kun:'もち',s:5,r:['用']},
+    {k:'準',m:'стандарт/уровень',on:'ジュン',kun:'—',s:13,r:['水','隹']},
+    {k:'式',m:'церемония/формула',on:'シキ',kun:'—',s:6,r:['工','弋']},
+    {k:'決',m:'решать',on:'ケツ',kun:'き',s:7,r:['水','夬']},
+    {k:'定',m:'определять/стабильный',on:'テイ、ジョウ',kun:'さだ',s:8,r:['宀','正']},
+    {k:'計',m:'считать/план',on:'ケイ',kun:'はか',s:9,r:['言','十']},
+    {k:'画',m:'картина/план',on:'ガ、カク',kun:'えが',s:8,r:['田','凵']},
+    {k:'案',m:'план/идея',on:'アン',kun:'—',s:10,r:['宀','女']},
+    {k:'活',m:'живой/деятельность',on:'カツ',kun:'い',s:9,r:['水','舌']},
+    {k:'動',m:'двигаться',on:'ドウ',kun:'うご',s:11,r:['重','力']},
+    {k:'変',m:'меняться/странный',on:'ヘン',kun:'か',s:9,r:['亦','攴']},
+    {k:'化',m:'изменяться/превращаться',on:'カ、ケ',kun:'ば',s:4,r:['人','匕']},
+    {k:'発',m:'выпускать/отправлять',on:'ハツ、ホツ',kun:'た',s:9,r:['癶','弓']},
+    {k:'表',m:'выражать/поверхность',on:'ヒョウ',kun:'あらわ、おもて',s:8,r:['亠','衣']},
+    {k:'現',m:'нынешний/появляться',on:'ゲン',kun:'あらわ',s:11,r:['玉','見']},
+    {k:'実',m:'реальный/плод',on:'ジツ',kun:'み、じつ',s:8,r:['宀','貫']},
+    {k:'場合',m:'случай/ситуация',on:'バアイ',kun:'—',s:15,r:['土','口']},
+    {k:'関',m:'связь/отношение',on:'カン',kun:'せき',s:14,r:['門','关']},
+    {k:'係',m:'связь/сотрудник',on:'ケイ',kun:'かか',s:9,r:['人','系']},
+    {k:'果',m:'результат/фрукт',on:'カ',kun:'は',s:8,r:['木','田']},
+    {k:'原',m:'оригинал/поле',on:'ゲン',kun:'はら',s:10,r:['厂','白']},
+    {k:'因',m:'причина',on:'イン',kun:'よ',s:6,r:['囗','大']},
+    {k:'由',m:'причина/происходить',on:'ユウ、ユ、ユイ',kun:'よし',s:5,r:['由']},
+    {k:'歴',m:'история/прохождение',on:'レキ',kun:'—',s:14,r:['厂','木']},
+    {k:'史',m:'история',on:'シ',kun:'—',s:5,r:['口','史']},
+    {k:'代',m:'поколение/эпоха',on:'ダイ、タイ',kun:'か、しろ',s:5,r:['人','弋']},
+    {k:'期',m:'период/срок',on:'キ、ゴ',kun:'—',s:12,r:['月','其']},
+    {k:'際',m:'случай/край',on:'サイ',kun:'きわ',s:14,r:['阜','祭']},
+    {k:'次',m:'следующий/порядок',on:'ジ、シ',kun:'つぎ、つ',s:6,r:['二','欠']},
+    {k:'度',m:'степень/раз',on:'ド、ト、タク',kun:'たび',s:9,r:['广','又']},
+    {k:'数',m:'число/считать',on:'スウ、ス',kun:'かず、かぞ',s:13,r:['米','攴']},
+    {k:'量',m:'количество',on:'リョウ',kun:'はか',s:12,r:['日','里']},
+    {k:'加',m:'добавлять',on:'カ',kun:'くわ',s:5,r:['力','口']},
+    {k:'減',m:'уменьшать',on:'ゲン',kun:'へ',s:12,r:['水','咸']},
+    {k:'増',m:'увеличивать',on:'ゾウ',kun:'ふ、ま',s:14,r:['土','曾']},
+    {k:'比',m:'сравнивать',on:'ヒ',kun:'くら',s:4,r:['比']},
+    {k:'対',m:'против/пара',on:'タイ、ツイ',kun:'—',s:7,r:['业','寸']},
+    {k:'合',m:'подходить/встречаться',on:'ゴウ、ガッ、カッ',kun:'あ',s:6,r:['亼','口']},
+    {k:'集',m:'собирать',on:'シュウ',kun:'あつ',s:12,r:['隹','木']},
+    {k:'分',m:'делить/понимать',on:'ブン、フン、ブ',kun:'わ、わか',s:4,r:['八','刀']},
+    {k:'共',m:'вместе',on:'キョウ',kun:'とも',s:6,r:['共']},
+    {k:'各',m:'каждый',on:'カク',kun:'おのおの',s:6,r:['夂','口']},
+    {k:'全',m:'весь/полный',on:'ゼン',kun:'すべ、まった',s:6,r:['入','王']},
+    {k:'部',m:'часть/отдел',on:'ブ',kun:'—',s:11,r:['咅','阜']},
+    {k:'際',m:'край/при',on:'サイ',kun:'きわ',s:14,r:['阜','祭']},
+    {k:'民',m:'народ/гражданин',on:'ミン',kun:'たみ',s:5,r:['氏']},
+    {k:'族',m:'группа/семья',on:'ゾク',kun:'—',s:11,r:['方','矢']},
+    {k:'性',m:'природа/пол',on:'セイ、ショウ',kun:'さが',s:8,r:['心','生']},
+    {k:'的',m:'мишень/~ный (суффикс)',on:'テキ',kun:'まと',s:8,r:['白','勺']},
+    {k:'的',m:'целевой/типичный',on:'テキ',kun:'まと',s:8,r:['白','勺']},
+    {k:'感',m:'чувство',on:'カン',kun:'—',s:13,r:['心','咸']},
+    {k:'情',m:'чувства/ситуация',on:'ジョウ、セイ',kun:'なさけ',s:11,r:['心','青']},
+    {k:'想',m:'думать/воображать',on:'ソウ、サ',kun:'おも',s:13,r:['心','相']},
+    {k:'念',m:'мысль/молитва',on:'ネン',kun:'—',s:8,r:['今','心']},
+    {k:'望',m:'надежда/желание',on:'ボウ、モウ',kun:'のぞ',s:11,r:['月','王']},
+    {k:'求',m:'искать/требовать',on:'キュウ',kun:'もと',s:7,r:['水']},
+    {k:'受',m:'получать',on:'ジュ',kun:'う',s:8,r:['又','爪']},
+    {k:'給',m:'давать/зарплата',on:'キュウ',kun:'—',s:12,r:['糸','合']},
+    {k:'払',m:'платить',on:'フツ',kun:'はら',s:5,r:['手','ム']},
+    {k:'借',m:'брать в долг',on:'シャク',kun:'か',s:10,r:['人','昔']},
+    {k:'貸',m:'одалживать',on:'タイ',kun:'か',s:12,r:['貝','代']},
+  ]
+};
 
-const VOCAB=[
-  {jp:'水',r:'みず',m:'вода',t:'N5'},
-  {jp:'山',r:'やま',m:'гора',t:'N5'},
-  {jp:'先生',r:'せんせい',m:'учитель',t:'N5'},
-  {jp:'学校',r:'がっこう',m:'школа',t:'N5'},
-  {jp:'食べる',r:'たべる',m:'есть, кушать',t:'глагол'},
-  {jp:'大きい',r:'おおきい',m:'большой',t:'прилаг.'},
-  {jp:'小さい',r:'ちいさい',m:'маленький',t:'прилаг.'},
-  {jp:'友達',r:'ともだち',m:'друг',t:'N5'},
-  {jp:'電車',r:'でんしゃ',m:'электричка',t:'N5'},
-  {jp:'駅',r:'えき',m:'станция',t:'N5'},
-  {jp:'今日',r:'きょう',m:'сегодня',t:'N5'},
-  {jp:'明日',r:'あした',m:'завтра',t:'N5'},
-  {jp:'何時',r:'なんじ',m:'который час?',t:'N5'},
-  {jp:'右',r:'みぎ',m:'правый',t:'N5'},
-  {jp:'左',r:'ひだり',m:'левый',t:'N5'},
-  {jp:'高い',r:'たかい',m:'высокий/дорогой',t:'прилаг.'},
-  {jp:'安い',r:'やすい',m:'дешёвый',t:'прилаг.'},
-  {jp:'新しい',r:'あたらしい',m:'новый',t:'прилаг.'},
-  {jp:'古い',r:'ふるい',m:'старый',t:'прилаг.'},
-  {jp:'有名',r:'ゆうめい',m:'знаменитый',t:'прилаг.'},
-  {jp:'親切',r:'しんせつ',m:'добрый/любезный',t:'прилаг.'},
-  {jp:'元気',r:'げんき',m:'бодрый/здоровый',t:'прилаг.'},
-  {jp:'大好き',r:'だいすき',m:'очень нравится',t:'прилаг.'},
-  {jp:'きれい',r:'きれい',m:'красивый/чистый',t:'прилаг.'},
-  {jp:'飲む',r:'のむ',m:'пить',t:'глагол'},
-  {jp:'行く',r:'いく',m:'идти',t:'глагол'},
-  {jp:'来る',r:'くる',m:'приходить',t:'глагол'},
-  {jp:'する',r:'する',m:'делать',t:'глагол'},
-  {jp:'見る',r:'みる',m:'смотреть',t:'глагол'},
-  {jp:'聞く',r:'きく',m:'слушать/спрашивать',t:'глагол'},
-  {jp:'書く',r:'かく',m:'писать',t:'глагол'},
-  {jp:'読む',r:'よむ',m:'читать',t:'глагол'},
-  {jp:'話す',r:'はなす',m:'говорить',t:'глагол'},
-  {jp:'起きる',r:'おきる',m:'просыпаться',t:'глагол'},
-  {jp:'寝る',r:'ねる',m:'спать/ложиться',t:'глагол'},
-  {jp:'買う',r:'かう',m:'покупать',t:'глагол'},
-  {jp:'出る',r:'でる',m:'выходить',t:'глагол'},
-  {jp:'帰る',r:'かえる',m:'возвращаться',t:'глагол'},
-  {jp:'分かる',r:'わかる',m:'понимать',t:'глагол'},
-  {jp:'ある',r:'ある',m:'есть (неодуш.)',t:'глагол'},
-  {jp:'いる',r:'いる',m:'есть (одуш.)',t:'глагол'},
-];
+// Vocab by level
+const VOCAB = {
+  N5: [
+    {jp:'水',r:'みず',m:'вода',t:'N5'},{jp:'山',r:'やま',m:'гора',t:'N5'},
+    {jp:'先生',r:'せんせい',m:'учитель',t:'N5'},{jp:'学校',r:'がっこう',m:'школа',t:'N5'},
+    {jp:'食べる',r:'たべる',m:'есть',t:'глагол'},{jp:'大きい',r:'おおきい',m:'большой',t:'прилаг.'},
+    {jp:'友達',r:'ともだち',m:'друг',t:'N5'},{jp:'電車',r:'でんしゃ',m:'электричка',t:'N5'},
+    {jp:'今日',r:'きょう',m:'сегодня',t:'N5'},{jp:'明日',r:'あした',m:'завтра',t:'N5'},
+    {jp:'行く',r:'いく',m:'идти',t:'глагол'},{jp:'来る',r:'くる',m:'приходить',t:'глагол'},
+    {jp:'する',r:'する',m:'делать',t:'глагол'},{jp:'見る',r:'みる',m:'смотреть',t:'глагол'},
+    {jp:'飲む',r:'のむ',m:'пить',t:'глагол'},{jp:'高い',r:'たかい',m:'высокий/дорогой',t:'прилаг.'},
+    {jp:'新しい',r:'あたらしい',m:'новый',t:'прилаг.'},{jp:'古い',r:'ふるい',m:'старый',t:'прилаг.'},
+  ],
+  N4: [
+    {jp:'家族',r:'かぞく',m:'семья',t:'N4'},{jp:'仕事',r:'しごと',m:'работа',t:'N4'},
+    {jp:'社会',r:'しゃかい',m:'общество',t:'N4'},{jp:'天気',r:'てんき',m:'погода',t:'N4'},
+    {jp:'海',r:'うみ',m:'море',t:'N4'},{jp:'空',r:'そら',m:'небо',t:'N4'},
+    {jp:'春',r:'はる',m:'весна',t:'N4'},{jp:'夏',r:'なつ',m:'лето',t:'N4'},
+    {jp:'秋',r:'あき',m:'осень',t:'N4'},{jp:'冬',r:'ふゆ',m:'зима',t:'N4'},
+    {jp:'朝',r:'あさ',m:'утро',t:'N4'},{jp:'昼',r:'ひる',m:'полдень',t:'N4'},
+    {jp:'夜',r:'よる',m:'ночь',t:'N4'},{jp:'体',r:'からだ',m:'тело',t:'N4'},
+    {jp:'病気',r:'びょうき',m:'болезнь',t:'N4'},{jp:'薬',r:'くすり',m:'лекарство',t:'N4'},
+    {jp:'働く',r:'はたらく',m:'работать',t:'глагол'},{jp:'始める',r:'はじめる',m:'начинать',t:'глагол'},
+    {jp:'終わる',r:'おわる',m:'заканчивать',t:'глагол'},{jp:'待つ',r:'まつ',m:'ждать',t:'глагол'},
+  ],
+  N3: [
+    {jp:'政治',r:'せいじ',m:'политика',t:'N3'},{jp:'経済',r:'けいざい',m:'экономика',t:'N3'},
+    {jp:'社会',r:'しゃかい',m:'общество',t:'N3'},{jp:'問題',r:'もんだい',m:'проблема',t:'N3'},
+    {jp:'研究',r:'けんきゅう',m:'исследование',t:'N3'},{jp:'科学',r:'かがく',m:'наука',t:'N3'},
+    {jp:'産業',r:'さんぎょう',m:'промышленность',t:'N3'},{jp:'商品',r:'しょうひん',m:'товар',t:'N3'},
+    {jp:'決定',r:'けってい',m:'решение',t:'N3'},{jp:'変化',r:'へんか',m:'изменение',t:'N3'},
+    {jp:'発展',r:'はってん',m:'развитие',t:'N3'},{jp:'感情',r:'かんじょう',m:'эмоция',t:'N3'},
+    {jp:'関係',r:'かんけい',m:'отношение',t:'N3'},{jp:'可能',r:'かのう',m:'возможный',t:'прилаг.'},
+    {jp:'必要',r:'ひつよう',m:'необходимый',t:'прилаг.'},{jp:'重要',r:'じゅうよう',m:'важный',t:'прилаг.'},
+  ]
+};
 
-const GRAMMAR=[
-  {p:'〜は〜です',l:'N5',m:'Связка — это/есть',ex:[{jp:'これは本です。',ru:'Это книга.'},{jp:'わたしは学生です。',ru:'Я студент.'}]},
-  {p:'〜ですか？',l:'N5',m:'Вопросительная форма',ex:[{jp:'あなたは学生ですか？',ru:'Вы студент?'},{jp:'これは水ですか？',ru:'Это вода?'}]},
-  {p:'〜が好きです',l:'N5',m:'Нравится ~',ex:[{jp:'日本語が好きです。',ru:'Мне нравится японский.'},{jp:'犬が好きですか？',ru:'Тебе нравятся собаки?'}]},
-  {p:'〜て、〜',l:'N5',m:'Форма て — связь действий',ex:[{jp:'食べて、寝ます。',ru:'Поем и лягу спать.'},{jp:'起きて、学校へ行きます。',ru:'Встану и пойду в школу.'}]},
-  {p:'〜ない',l:'N5',m:'Отрицание глагола',ex:[{jp:'食べない。',ru:'Не ем.'},{jp:'行かない。',ru:'Не пойду.'}]},
-  {p:'〜たい',l:'N5',m:'Хочу ~ (желание)',ex:[{jp:'日本へ行きたい。',ru:'Хочу в Японию.'},{jp:'水が飲みたい。',ru:'Хочу пить.'}]},
-  {p:'〜ている',l:'N5',m:'Длительное действие',ex:[{jp:'今、食べています。',ru:'Сейчас ем.'},{jp:'日本語を勉強しています。',ru:'Изучаю японский.'}]},
-  {p:'〜に行く',l:'N5',m:'Идти куда-то с целью',ex:[{jp:'学校に行く。',ru:'Иду в школу.'},{jp:'買い物に行きます。',ru:'Иду за покупками.'}]},
-  {p:'〜から〜まで',l:'N5',m:'От ~ до ~',ex:[{jp:'月曜日から金曜日まで。',ru:'С пон. по пятницу.'},{jp:'東京から大阪まで。',ru:'От Токио до Осаки.'}]},
-  {p:'〜も',l:'N5',m:'Тоже (включение)',ex:[{jp:'私も学生です。',ru:'Я тоже студент.'},{jp:'これも好きです。',ru:'Это тоже нравится.'}]},
-  {p:'〜ませんか',l:'N5',m:'Предложение/приглашение',ex:[{jp:'一緒に食べませんか？',ru:'Не поедим вместе?'},{jp:'映画を見ませんか？',ru:'Не посмотрим фильм?'}]},
-  {p:'〜でしょう',l:'N5',m:'Вероятно/наверное',ex:[{jp:'明日は雨でしょう。',ru:'Завтра, наверное, дождь.'},{jp:'彼は学生でしょう。',ru:'Он, наверное, студент.'}]},
+// Grammar by level
+const GRAMMAR = [
+  {p:'〜は〜です',l:'N5',m:'Связка — это/есть',ex:[{jp:'これは本です。',ru:'Это книга.'}]},
+  {p:'〜ですか？',l:'N5',m:'Вопросительная форма',ex:[{jp:'あなたは学生ですか？',ru:'Вы студент?'}]},
+  {p:'〜が好きです',l:'N5',m:'Нравится ~',ex:[{jp:'日本語が好きです。',ru:'Мне нравится японский.'}]},
+  {p:'〜ている',l:'N5',m:'Длительное действие',ex:[{jp:'今、食べています。',ru:'Сейчас ем.'}]},
+  {p:'〜ない',l:'N5',m:'Отрицание глагола',ex:[{jp:'食べない。',ru:'Не ем.'}]},
+  {p:'〜たい',l:'N5',m:'Хочу ~ (желание)',ex:[{jp:'日本へ行きたい。',ru:'Хочу в Японию.'}]},
+  {p:'〜に行く',l:'N5',m:'Идти с целью',ex:[{jp:'買い物に行きます。',ru:'Иду за покупками.'}]},
+  {p:'〜から〜まで',l:'N5',m:'От ~ до ~',ex:[{jp:'月曜日から金曜日まで。',ru:'С пон. по пятницу.'}]},
+  {p:'〜も',l:'N5',m:'Тоже',ex:[{jp:'私も学生です。',ru:'Я тоже студент.'}]},
+  {p:'〜ませんか',l:'N5',m:'Предложение/приглашение',ex:[{jp:'一緒に食べませんか？',ru:'Не поедим вместе?'}]},
+  // N4
+  {p:'〜てから',l:'N4',m:'После того как ~',ex:[{jp:'食べてから、寝ます。',ru:'После того как поем, лягу спать.'}]},
+  {p:'〜たことがある',l:'N4',m:'Опыт — делал когда-то',ex:[{jp:'日本に行ったことがあります。',ru:'Я был в Японии (однажды).'}]},
+  {p:'〜ために',l:'N4',m:'Для того чтобы',ex:[{jp:'日本語を勉強するために、毎日練習します。',ru:'Чтобы учить японский, практикуюсь каждый день.'}]},
+  {p:'〜ながら',l:'N4',m:'Одновременно — пока ~',ex:[{jp:'音楽を聞きながら、勉強します。',ru:'Учусь, слушая музыку.'}]},
+  {p:'〜てもいい',l:'N4',m:'Можно/разрешено ~',ex:[{jp:'ここに座ってもいいですか？',ru:'Можно здесь сесть?'}]},
+  {p:'〜てはいけない',l:'N4',m:'Нельзя/запрещено ~',ex:[{jp:'ここで写真を撮ってはいけません。',ru:'Здесь нельзя фотографировать.'}]},
+  {p:'〜そうだ (様態)',l:'N4',m:'Выглядит как ~/кажется',ex:[{jp:'雨が降りそうです。',ru:'Похоже, пойдёт дождь.'}]},
+  {p:'〜という',l:'N4',m:'Называемый/который говорят',ex:[{jp:'田中という人が来ました。',ru:'Пришёл человек по имени Танака.'}]},
+  {p:'〜なら',l:'N4',m:'Если (условие/тема)',ex:[{jp:'日本に行くなら、富士山を見てください。',ru:'Если едешь в Японию — посмотри на Фудзи.'}]},
+  {p:'〜ようになる',l:'N4',m:'Стать способным/начать',ex:[{jp:'日本語が話せるようになりました。',ru:'Я стал уметь говорить по-японски.'}]},
+  // N3
+  {p:'〜によって',l:'N3',m:'В зависимости от ~/благодаря',ex:[{jp:'季節によって気温が変わります。',ru:'Температура меняется в зависимости от сезона.'}]},
+  {p:'〜に対して',l:'N3',m:'По отношению к ~/против',ex:[{jp:'彼の意見に対して、反論しました。',ru:'Я возразил против его мнения.'}]},
+  {p:'〜において',l:'N3',m:'В ~/при (формально)',ex:[{jp:'この分野において、日本は世界一です。',ru:'В этой области Япония — лучшая в мире.'}]},
+  {p:'〜ことになっている',l:'N3',m:'Запланировано/предполагается',ex:[{jp:'来月、日本に行くことになっています。',ru:'В следующем месяце я должен ехать в Японию.'}]},
+  {p:'〜わけではない',l:'N3',m:'Это не значит что ~/не обязательно',ex:[{jp:'お金があれば幸せなわけではない。',ru:'Не значит, что деньги = счастье.'}]},
+  {p:'〜にしても',l:'N3',m:'Даже если ~/в любом случае',ex:[{jp:'どんなにお金があるにしても、健康が一番。',ru:'Сколько бы денег ни было, здоровье важнее.'}]},
+  {p:'〜とすれば／としたら',l:'N3',m:'Если предположить что ~',ex:[{jp:'もし宝くじに当たったとしたら、何をしますか？',ru:'Если бы выиграл лотерею, что бы сделал?'}]},
+  {p:'〜ものの',l:'N3',m:'Хотя ~/несмотря на',ex:[{jp:'勉強したものの、試験に落ちた。',ru:'Хотя и учился, провалил экзамен.'}]},
 ];
 
 const EXC_TRAPS=[
-  {word:'有名',read:'ゆうめい',badge:'trap',label:'ловушка',
-   explain:'Заканчивается на〜い, но это <b>な-прилагательное</b>. Суффикс〜名 не является частью флексии.',
-   wrong:'✗  有名い人 (неверно)',right:'✓  有名な人 (знаменитый человек)',
-   ex:[{jp:'彼は有名な歌手です。',ru:'Он знаменитый певец.'},{jp:'これは有名な店です。',ru:'Это знаменитый магазин.'}]},
-  {word:'嫌い',read:'きらい',badge:'trap',label:'ловушка',
-   explain:'Заканчивается на〜い, но это <b>な-прилагательное</b>. Антоним 好き (すき) — тоже な.',
-   wrong:'✗  嫌いい食べ物 (неверно)',right:'✓  嫌いな食べ物 (нелюбимая еда)',
-   ex:[{jp:'嫌いな食べ物は何ですか？',ru:'Какая еда тебе не нравится?'}]},
-  {word:'きれい',read:'きれい',badge:'trap',label:'ловушка',
-   explain:'Выглядит как い-прилагательное, но это <b>な-прилагательное</b>. Иероглиф 綺麗 не заканчивается на い.',
-   wrong:'✗  きれいい花 (неверно)',right:'✓  きれいな花 (красивый цветок)',
-   ex:[{jp:'きれいな人ですね。',ru:'Красивый человек, правда?'},{jp:'部屋をきれいにする。',ru:'Убрать комнату.'}]},
-  {word:'大好き',read:'だいすき',badge:'trap',label:'ловушка',
-   explain:'好き и 大好き — <b>な-прилагательные</b>, несмотря на окончание〜き.',
-   wrong:'✗  大好きい食べ物 (неверно)',right:'✓  大好きな食べ物 (любимая еда)',
-   ex:[{jp:'大好きな人。',ru:'Любимый человек.'},{jp:'日本語が大好きです。',ru:'Я очень люблю японский.'}]},
-  {word:'上手',read:'じょうず',badge:'trap',label:'ловушка',
-   explain:'«Умелый» — <b>な-прилагательное</b>. Не путать с うまい (другое слово со значением вкусный/умелый, い-прилаг.).',
-   wrong:'✗  上手い人 ≠ じょうずい人',right:'✓  上手な人 (умелый человек)',
-   ex:[{jp:'日本語が上手ですね。',ru:'Ты хорошо говоришь по-японски.'},{jp:'上手な絵。',ru:'Хорошо нарисованная картина.'}]},
-  {word:'親切',read:'しんせつ',badge:'trap',label:'ловушка',
-   explain:'«Добрый» — <b>な-прилагательное</b>. Никакого отношения к い-форме.',
-   wrong:'✗  親切い人 (неверно)',right:'✓  親切な人 (добрый человек)',
-   ex:[{jp:'親切な人ですね。',ru:'Какой добрый человек!'},{jp:'親切にしてください。',ru:'Пожалуйста, будьте добры.'}]},
+  {word:'有名',read:'ゆうめい',badge:'trap',label:'ловушка',explain:'Заканчивается на〜い, но это <b>な-прилагательное</b>.',wrong:'✗  有名い人',right:'✓  有名な人 (знаменитый человек)',ex:[{jp:'彼は有名な歌手です。',ru:'Он знаменитый певец.'}]},
+  {word:'嫌い',read:'きらい',badge:'trap',label:'ловушка',explain:'Заканчивается на〜い, но это <b>な-прилагательное</b>.',wrong:'✗  嫌いい食べ物',right:'✓  嫌いな食べ物 (нелюбимая еда)',ex:[{jp:'嫌いな食べ物は何ですか？',ru:'Какая еда тебе не нравится?'}]},
+  {word:'きれい',read:'きれい',badge:'trap',label:'ловушка',explain:'Выглядит как い-прилагательное, но это <b>な-прилагательное</b>.',wrong:'✗  きれいい花',right:'✓  きれいな花 (красивый цветок)',ex:[{jp:'きれいな人ですね。',ru:'Красивый человек, правда?'}]},
+  {word:'大好き',read:'だいすき',badge:'trap',label:'ловушка',explain:'好き и 大好き — <b>な-прилагательные</b>.',wrong:'✗  大好きい食べ物',right:'✓  大好きな食べ物 (любимая еда)',ex:[{jp:'日本語が大好きです。',ru:'Я очень люблю японский.'}]},
+  {word:'上手',read:'じょうず',badge:'trap',label:'ловушка',explain:'«Умелый» — <b>な-прилагательное</b>. Не путать с うまい.',wrong:'✗  上手い人 ≠ じょうずい人',right:'✓  上手な人 (умелый человек)',ex:[{jp:'日本語が上手ですね。',ru:'Ты хорошо говоришь по-японски.'}]},
 ];
-
 const EXC_IRREG=[
-  {word:'する',read:'する',badge:'irr',label:'нерегулярный',
-   explain:'Единственный нерегулярный глагол группы サ変. Спрягается полностью иначе, чем обычные глаголы.',
-   wrong:'✗  しない — не работает стандартная схема',right:'✓  する→しない→します→して→した',
-   ex:[{jp:'勉強する → 勉強しない',ru:'Учиться → не учиться'},{jp:'電話します。',ru:'Позвоню. (вежл.)'}]},
-  {word:'くる（来る）',read:'くる',badge:'irr',label:'нерегулярный',
-   explain:'Второй нерегулярный глагол — カ変. Корень меняется при каждом спряжении.',
-   wrong:'✗  くない (неверно)',right:'✓  くる→こない→きます→きて→きた',
-   ex:[{jp:'来る → 来ない（こない）',ru:'Приходить → не приходить'},{jp:'来て（きて）ください。',ru:'Пожалуйста, приходи.'}]},
-  {word:'ある',read:'ある',badge:'irr',label:'нерегулярный',
-   explain:'Глагол существования для неодушевлённых. Отрицание не あらない, а просто <b>ない</b>.',
-   wrong:'✗  あらない (неверно)',right:'✓  ある → ない',
-   ex:[{jp:'本がある → 本がない',ru:'Книга есть → книги нет'},{jp:'時間がありません。',ru:'У меня нет времени.'}]},
-  {word:'いい／よい',read:'いい／よい',badge:'irr',label:'нерегулярный',
-   explain:'В разговоре — いい, но все производные формы образуются от <b>よい</b>.',
-   wrong:'✗  いくない、いかった (неверно)',right:'✓  よくない、よかった',
-   ex:[{jp:'天気がよくない。',ru:'Погода нехорошая.'},{jp:'よかった！',ru:'Хорошо! / Слава богу!'}]},
+  {word:'する',read:'する',badge:'irr',label:'нерегулярный',explain:'Единственный нерегулярный глагол группы サ変.',wrong:'✗  しない — не по стандарту',right:'✓  する→しない→します→して→した',ex:[{jp:'勉強する → 勉強しない',ru:'Учиться → не учиться'}]},
+  {word:'くる（来る）',read:'くる',badge:'irr',label:'нерегулярный',explain:'Второй нерегулярный — カ変. Корень меняется.',wrong:'✗  くない',right:'✓  くる→こない→きます→きて→きた',ex:[{jp:'来て（きて）ください。',ru:'Пожалуйста, приходи.'}]},
+  {word:'ある',read:'ある',badge:'irr',label:'нерегулярный',explain:'Глагол существования. Отрицание не あらない, а <b>ない</b>.',wrong:'✗  あらない',right:'✓  ある → ない',ex:[{jp:'本がある → 本がない',ru:'Книга есть → книги нет'}]},
+  {word:'いい／よい',read:'いい／よい',badge:'irr',label:'нерегулярный',explain:'В речи — いい, но формы образуются от <b>よい</b>.',wrong:'✗  いくない、いかった',right:'✓  よくない、よかった',ex:[{jp:'よかった！',ru:'Хорошо! / Слава богу!'}]},
 ];
-
 const EXC_RULES=[
-  {word:'〜ない: глаголы на〜う',read:'',badge:'rule',label:'правило',
-   explain:'У う-глаголов перед〜ない гласная меняется на あ. Но у глаголов на〜う вместо あわ- пишется <b>わ</b>.',
-   wrong:'✗  買う → あわない (неверно)',right:'✓  買う → 買わない（かわない）',
-   ex:[{jp:'言う → 言わない',ru:'Говорить → не говорить'},{jp:'歌う → 歌わない',ru:'Петь → не петь'}]},
-  {word:'〜て форма: 行く — исключение',read:'',badge:'rule',label:'правило',
-   explain:'て-форма く-глаголов: く→いて. Но 行く — единственное исключение: не いきて, а <b>いって</b>.',
-   wrong:'✗  行く → 行きて (неверно)',right:'✓  行く → 行って（いって）',
-   ex:[{jp:'書く → 書いて',ru:'Обычное правило для く'},{jp:'行く → 行って ← исключение!',ru:''}]},
-  {word:'は vs が',read:'',badge:'rule',label:'правило',
-   explain:'は — тема предложения (уже известна слушающему). が — подлежащее (новая информация или акцент). Нет простого правила — нужна практика.',
-   wrong:'✗  Всегда は вместо が — частая ошибка',right:'✓  誰が来た？→ 田中さんが来た。',
-   ex:[{jp:'猫がいる。',ru:'Есть кот. (новая информация)'},{jp:'猫は魚が好きです。',ru:'Кот любит рыбу. (кот — тема)'}]},
-  {word:'Счётные суффиксы: 一、六、八、十',read:'',badge:'rule',label:'правило',
-   explain:'Произношение чисел 1, 6, 8, 10 меняется в зависимости от суффикса. Универсального правила нет — нужно запоминать каждый случай.',
-   wrong:'✗  いちほん、ろくほん (иногда неверно)',right:'✓  いっぽん、ろっぽん (длинные предметы)',
-   ex:[{jp:'一本（いっぽん）、六本（ろっぽん）',ru:'Суффикс〜本 (длинные вещи)'},{jp:'一枚（いちまい）、六枚（ろくまい）',ru:'Суффикс〜枚 (плоские вещи)'}]},
+  {word:'〜ない: глаголы на〜う',read:'',badge:'rule',label:'правило',explain:'У う-глаголов перед〜ない гласная → あ. Но〜う → <b>わ</b>.',wrong:'✗  買う → あわない',right:'✓  買う → 買わない（かわない）',ex:[{jp:'言う → 言わない',ru:'Говорить → не говорить'}]},
+  {word:'〜て форма: 行く — исключение',read:'',badge:'rule',label:'правило',explain:'て-форма く-глаголов: く→いて. Но 行く — исключение.',wrong:'✗  行く → 行きて',right:'✓  行く → 行って（いって）',ex:[{jp:'書く → 書いて (норма)',ru:'Писать → форма て'}]},
+  {word:'は vs が',read:'',badge:'rule',label:'правило',explain:'は — тема (известна). が — новая информация/акцент.',wrong:'✗  Всегда は вместо が',right:'✓  誰が来た？→ 田中さんが来た。',ex:[{jp:'猫は魚が好きです。',ru:'Кот любит рыбу. (кот — тема)'}]},
 ];
 
-// STATE
-let ST={learned:{},progress:{},doneToday:0,streak:0,lastDate:''};
+// ===== LEVEL SYSTEM =====
+const LEVELS = ['N5','N4','N3'];
+const LEVEL_INFO = {
+  N5:{icon:'🌱',name:'N5 — Начальный',desc:'80 кандзи, базовая грамматика, ~800 слов',color:'#185FA5'},
+  N4:{icon:'🌿',name:'N4 — Элементарный',desc:'300 кандзи, основные паттерны, ~1500 слов',color:'#3B6D11'},
+  N3:{icon:'🌳',name:'N3 — Средний',desc:'650 кандзи, сложная грамматика, ~3700 слов',color:'#854F0B'},
+};
+
+let ST = {learned:{},progress:{},doneToday:0,streak:0,lastDate:'',
+  activeLvl:'N5', unlockedLvls:['N5'], completedLvls:[]};
 try{const s=localStorage.getItem('nihongo_app');if(s)ST=Object.assign(ST,JSON.parse(s));}catch(e){}
 const today=new Date().toDateString();
 if(ST.lastDate!==today){ST.doneToday=0;ST.lastDate=today;}
 
 function saveState(){
   try{localStorage.setItem('nihongo_app',JSON.stringify(ST));}catch(e){}
-  const t=document.getElementById('toast');
+  showToast('✓ сохранено');
+}
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;
   t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);
 }
 
-// GLOBAL SEARCH
+function currentKanji(){return KANJI[ST.activeLvl]||[];}
+function currentVocab(){return VOCAB[ST.activeLvl]||[];}
+
+function learnedCountForLevel(lvl){
+  const k=KANJI[lvl];
+  return k.filter((_,i)=>ST.learned[lvl+'_'+i]).length;
+}
+
+// ===== SETTINGS MODAL =====
+function openSettings(){
+  renderLevelCards();
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeSettings(){
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('modal-overlay'))closeSettings();
+}
+
+function renderLevelCards(){
+  const c=document.getElementById('lvl-cards');c.innerHTML='';
+  LEVELS.forEach(lvl=>{
+    const info=LEVEL_INFO[lvl];
+    const isActive=ST.activeLvl===lvl;
+    const isUnlocked=ST.unlockedLvls.includes(lvl);
+    const isCompleted=ST.completedLvls.includes(lvl);
+    const learned=learnedCountForLevel(lvl);
+    const total=KANJI[lvl].length;
+    const pct=Math.round(learned/total*100);
+    const prevLvl=LEVELS[LEVELS.indexOf(lvl)-1];
+    const canUnlock=!prevLvl||ST.unlockedLvls.includes(prevLvl)||ST.completedLvls.includes(prevLvl);
+
+    const statusHtml=isActive
+      ?`<span class="lvl-status" style="background:${info.color}20;color:${info.color}">Активный</span>`
+      :isCompleted?`<span class="lvl-status" style="background:var(--gbg);color:var(--gtxt)">Пройден ✓</span>`
+      :isUnlocked?`<span class="lvl-status" style="background:var(--bg2);color:var(--text2)">Разблокирован</span>`
+      :`<span class="lvl-status" style="background:var(--bg2);color:var(--text3)">🔒 Заблокирован</span>`;
+
+    let actionsHtml='';
+    if(!isActive&&isUnlocked){
+      actionsHtml=`<div class="lvl-actions"><button class="lvl-btn primary" onclick="setActiveLevel('${lvl}')">Учить сейчас</button>${!isCompleted?`<button class="lvl-btn skip" onclick="markCompleted('${lvl}')">Уже знаю ✓</button>`:''}</div>`;
+    } else if(!isUnlocked&&canUnlock){
+      actionsHtml=`<div class="lvl-actions"><button class="lvl-btn primary" onclick="unlockLevel('${lvl}')">Разблокировать</button><button class="lvl-btn skip" onclick="unlockAndSkip('${lvl}')">Знаю, пропустить</button></div>`;
+    } else if(isActive&&!isCompleted){
+      actionsHtml=`<div class="lvl-actions"><button class="lvl-btn skip" onclick="markCompleted('${lvl}')">Отметить как пройденный</button></div>`;
+    }
+
+    const card=document.createElement('div');
+    card.className='lvl-card'+(isActive?' active-lvl':'')+((!isUnlocked&&!canUnlock)?' locked':'');
+    if(isActive)card.style.borderColor=info.color;
+    card.innerHTML=`
+      <div class="lvl-card-top">
+        <span class="lvl-icon">${info.icon}</span>
+        <span class="lvl-name">${info.name}</span>
+        ${statusHtml}
+      </div>
+      <div class="lvl-desc">${info.desc}</div>
+      <div class="lvl-prog-row">
+        <div class="lvl-prog-bar"><div class="lvl-prog-fill" style="width:${pct}%;background:${info.color}"></div></div>
+        <div class="lvl-prog-txt">${learned}/${total} кандзи</div>
+      </div>
+      ${actionsHtml}`;
+    c.appendChild(card);
+  });
+}
+
+function setActiveLevel(lvl){
+  ST.activeLvl=lvl;
+  saveState();
+  applyLevel();
+  renderLevelCards();
+  showToast('Уровень: '+lvl);
+}
+
+function unlockLevel(lvl){
+  if(!ST.unlockedLvls.includes(lvl))ST.unlockedLvls.push(lvl);
+  ST.activeLvl=lvl;
+  saveState();applyLevel();renderLevelCards();
+  showToast(lvl+' разблокирован!');
+}
+
+function unlockAndSkip(lvl){
+  if(!ST.unlockedLvls.includes(lvl))ST.unlockedLvls.push(lvl);
+  if(!ST.completedLvls.includes(lvl))ST.completedLvls.push(lvl);
+  // unlock next
+  const next=LEVELS[LEVELS.indexOf(lvl)+1];
+  if(next&&!ST.unlockedLvls.includes(next))ST.unlockedLvls.push(next);
+  ST.activeLvl=next||lvl;
+  saveState();applyLevel();renderLevelCards();
+  showToast(lvl+' пропущен, переходим к '+(next||lvl));
+}
+
+function markCompleted(lvl){
+  if(!ST.completedLvls.includes(lvl))ST.completedLvls.push(lvl);
+  const next=LEVELS[LEVELS.indexOf(lvl)+1];
+  if(next&&!ST.unlockedLvls.includes(next))ST.unlockedLvls.push(next);
+  if(next)ST.activeLvl=next;
+  saveState();applyLevel();renderLevelCards();
+  showToast(next?lvl+' пройден! Открыт '+next:lvl+' пройден!');
+}
+
+function applyLevel(){
+  const lvl=ST.activeLvl;
+  const info=LEVEL_INFO[lvl];
+  // header badge
+  const hb=document.getElementById('hlvl');
+  hb.textContent=lvl;
+  hb.className='hlvl-badge hlvl-'+lvl.toLowerCase();
+  // progress bar color
+  const pf=document.getElementById('main-prog');
+  pf.className='prog-fill '+lvl.toLowerCase();
+  // rebuild SRS queue
+  buildQueue();
+  updateProgress();
+  renderGrid();
+  // reset grammar filter
+  gFilter='all';
+  document.querySelectorAll('#g-filters .k-filter').forEach(b=>b.classList.remove('on'));
+  document.querySelector('#g-filters .k-filter').classList.add('on');
+  document.getElementById('grammar-list').innerHTML='';
+  renderGrammar();
+}
+
+function updateProgress(){
+  const lvl=ST.activeLvl;
+  const k=KANJI[lvl];
+  const learned=k.filter((_,i)=>ST.learned[lvl+'_'+i]).length;
+  const pct=Math.round(learned/k.length*100);
+  document.getElementById('main-prog').style.width=pct+'%';
+}
+
+// ===== GLOBAL SEARCH =====
 function globalSearch(q){
   const sr=document.getElementById('search-results');
   const gclear=document.getElementById('gclear');
@@ -530,66 +825,76 @@ function globalSearch(q){
   if(!q){
     sr.style.display='none';
     if(activeScreen)activeScreen.style.display='';
-    gclear.style.display='none';
-    return;
+    gclear.style.display='none';return;
   }
   gclear.style.display='block';
   sr.style.display='block';
   if(activeScreen)activeScreen.style.display='none';
   const ql=q.toLowerCase();
-  const kR=KANJI.filter(k=>k.k.includes(q)||k.m.toLowerCase().includes(ql)||k.on.includes(q)||k.kun.includes(q));
-  const vR=VOCAB.filter(v=>v.jp.includes(q)||v.r.includes(q)||v.m.toLowerCase().includes(ql));
+  // search all levels
+  let kResults=[];
+  LEVELS.forEach(lvl=>{
+    KANJI[lvl].forEach((k,i)=>{
+      if(k.k.includes(q)||k.m.toLowerCase().includes(ql)||k.on.includes(q)||k.kun.includes(q))
+        kResults.push({...k,lvl,i});
+    });
+  });
+  let vResults=[];
+  LEVELS.forEach(lvl=>{
+    VOCAB[lvl].forEach(v=>{
+      if(v.jp.includes(q)||v.r.includes(q)||v.m.toLowerCase().includes(ql))
+        vResults.push({...v,lvl});
+    });
+  });
   let html='';
-  if(kR.length){
-    html+=`<div class="sr-section"><div class="sr-label">Кандзи — ${kR.length} рез.</div>`;
-    kR.forEach(k=>{
-      const i=KANJI.indexOf(k);
-      html+=`<div class="sr-item" onclick="goToKanji(${i})">
+  if(kResults.length){
+    html+=`<div class="sr-section"><div class="sr-label">Кандзи — ${kResults.length} рез.</div>`;
+    kResults.forEach(k=>{
+      html+=`<div class="sr-item" onclick="goToKanji('${k.lvl}',${k.i})">
         <div class="sr-jp">${k.k}</div>
         <div style="flex:1"><div class="sr-read">${k.on} / ${k.kun}</div><div class="sr-mean">${k.m}</div></div>
-        <span class="sr-tag" style="background:var(--bbg);color:var(--btxt)">${k.s} штр.</span>
+        <span class="sr-tag" style="background:var(--bbg);color:var(--btxt)">${k.lvl}</span>
       </div>`;
     });
     html+='</div>';
   }
-  if(vR.length){
-    html+=`<div class="sr-section"><div class="sr-label">Слова — ${vR.length} рез.</div>`;
-    vR.forEach(v=>{
+  if(vResults.length){
+    html+=`<div class="sr-section"><div class="sr-label">Слова — ${vResults.length} рез.</div>`;
+    vResults.forEach(v=>{
       html+=`<div class="sr-item">
         <div class="sr-jp">${v.jp}</div>
         <div style="flex:1"><div class="sr-read">${v.r}</div><div class="sr-mean">${v.m}</div></div>
-        <span class="sr-tag" style="background:var(--pbg);color:var(--ptxt)">${v.t}</span>
+        <span class="sr-tag" style="background:var(--pbg);color:var(--ptxt)">${v.lvl}</span>
       </div>`;
     });
     html+='</div>';
   }
-  if(!kR.length&&!vR.length)html='<div class="sr-empty">Ничего не найдено по «'+q+'»</div>';
+  if(!kResults.length&&!vResults.length)html='<div class="sr-empty">Ничего не найдено по «'+q+'»</div>';
   sr.innerHTML=html;
 }
 
 function clearSearch(){
-  document.getElementById('gsearch').value='';
-  globalSearch('');
-  const s=document.querySelector('.screen.active');
-  if(s)s.style.display='';
+  document.getElementById('gsearch').value='';globalSearch('');
+  const s=document.querySelector('.screen.active');if(s)s.style.display='';
 }
-
-function goToKanji(i){
+function goToKanji(lvl,i){
   clearSearch();
+  if(ST.activeLvl!==lvl){ST.activeLvl=lvl;applyLevel();}
   showTab('kanji',document.querySelectorAll('.nav-btn')[1]);
   setTimeout(()=>openKanji(i),80);
 }
 
-// SRS
-const SRS_CARDS=KANJI.map((k,i)=>({
-  id:i,kanji:k.k,
-  read:k.kun.split('、')[0]!=='—'?k.kun.split('、')[0]+' ('+k.on.split('、')[0]+')':k.on.split('、')[0],
-  mean:k.m,tag:k.s<=3?'простой':k.s<=6?'средний':'сложный'
-}));
+// ===== SRS =====
 let queue=[],curCard=null,cardFlipped=false,doneCount=0;
 function buildQueue(){
+  const lvl=ST.activeLvl;
+  const cards=KANJI[lvl].map((k,i)=>({
+    id:lvl+'_'+i,kanji:k.k,lvl,
+    read:k.kun.split('、')[0]!=='—'?k.kun.split('、')[0]+' ('+k.on.split('、')[0]+')':k.on.split('、')[0],
+    mean:k.m,tag:k.s<=3?'простой':k.s<=6?'средний':'сложный'
+  }));
   const now=new Date();
-  queue=SRS_CARDS.filter(c=>{const p=ST.progress[c.id];if(!p)return true;return new Date(p.due)<=now;}).slice(0,20);
+  queue=cards.filter(c=>{const p=ST.progress[c.id];if(!p)return true;return new Date(p.due)<=now;}).slice(0,20);
   doneCount=0;
   if(!queue.length){showDoneScreen();return;}
   loadCard();updateSRSStats();
@@ -602,12 +907,12 @@ function loadCard(){
   document.getElementById('fc-r').textContent=curCard.read;
   document.getElementById('fc-m').textContent=curCard.mean;
   document.getElementById('fc-tag').textContent=curCard.tag;
-  document.getElementById('fc-cnt').textContent=queue.length+' карт';
+  document.getElementById('fc-lvl').textContent=curCard.lvl+' · '+queue.length+' карт';
   document.getElementById('srs-btns').style.display='none';
   const ca=document.getElementById('card-area');ca.innerHTML='';ca.appendChild(fc);
 }
 function showDoneScreen(){
-  document.getElementById('card-area').innerHTML='<div class="done-card"><div class="done-emoji">🎉</div><div class="done-title">На сегодня всё!</div><div class="done-sub">Все карточки повторены.<br>Возвращайся завтра.</div></div>';
+  document.getElementById('card-area').innerHTML='<div class="done-card"><div class="done-emoji">🎉</div><div class="done-title">На сегодня всё!</div><div class="done-sub">Все карточки '+ST.activeLvl+' повторены.<br>Возвращайся завтра.</div></div>';
   document.getElementById('srs-btns').style.display='none';
 }
 function flipCard(){
@@ -630,10 +935,9 @@ function updateSRSStats(){
   document.getElementById('s-due').textContent=queue.length;
   document.getElementById('s-done').textContent=doneCount;
   document.getElementById('s-streak').textContent=ST.streak;
-  document.getElementById('streak-badge').textContent='🔥 '+ST.streak+' дней';
 }
 
-// KANJI
+// ===== KANJI =====
 let kFilter='all',selIdx=null,kStrokes=[],kStrokeCur=0,kAnimTimer=null;
 function toHex(ch){return ch.codePointAt(0).toString(16).padStart(5,'0');}
 async function loadSVG(ch){
@@ -647,8 +951,7 @@ async function loadSVG(ch){
     const txt=await res.text();
     const doc=new DOMParser().parseFromString(txt,'image/svg+xml');
     kStrokes=Array.from(doc.querySelectorAll('path')).map(p=>p.getAttribute('d')).filter(Boolean);
-    renderStrokes(kStrokes.length);
-    setTimeout(()=>playAnim(),150);
+    renderStrokes(kStrokes.length);setTimeout(()=>playAnim(),150);
   }catch(e){
     fr.innerHTML=`<div class="svg-fallback">${ch}</div>`;
     document.getElementById('s-num').textContent='—';
@@ -667,8 +970,7 @@ function renderStrokes(n){
     <line x1="54.5" y1="0" x2="54.5" y2="109" stroke="rgba(128,128,128,0.12)" stroke-width="0.5"/>
     <line x1="0" y1="54.5" x2="109" y2="54.5" stroke="rgba(128,128,128,0.12)" stroke-width="0.5"/>
     ${paths}</svg>`;
-  kStrokeCur=n;
-  document.getElementById('s-num').textContent=n+'/'+kStrokes.length;
+  kStrokeCur=n;document.getElementById('s-num').textContent=n+'/'+kStrokes.length;
 }
 function stepS(dir){clearTimeout(kAnimTimer);renderStrokes(Math.min(Math.max(1,kStrokeCur+dir),kStrokes.length));}
 function playAnim(){
@@ -677,13 +979,14 @@ function playAnim(){
 }
 function openKanji(i){
   clearTimeout(kAnimTimer);selIdx=i;
-  const k=KANJI[i];
+  const k=currentKanji()[i];
   document.getElementById('k-mean').textContent=k.m;
   document.getElementById('k-on').textContent=k.on;
   document.getElementById('k-kun').textContent=k.kun;
   document.getElementById('k-s').textContent=k.s;
   document.getElementById('k-rads').innerHTML=k.r.map(r=>`<span class="rad">${r}</span>`).join('');
-  const learned=!!ST.learned[i];
+  const key=ST.activeLvl+'_'+i;
+  const learned=!!ST.learned[key];
   const mb=document.getElementById('mark-btn');
   mb.textContent=learned?'Снять отметку':'Отметить как выученный';
   mb.className='mark-btn '+(learned?'unlearn':'learn');
@@ -693,7 +996,8 @@ function openKanji(i){
 }
 function toggleLearned(){
   if(selIdx===null)return;
-  ST.learned[selIdx]=!ST.learned[selIdx];
+  const key=ST.activeLvl+'_'+selIdx;
+  ST.learned[key]=!ST.learned[key];
   saveState();openKanji(selIdx);updateProgress();
 }
 function setKFilter(f,btn){
@@ -704,8 +1008,9 @@ function setKFilter(f,btn){
 function renderGrid(){
   const q=document.getElementById('k-search').value.toLowerCase();
   const grid=document.getElementById('k-grid');grid.innerHTML='';let shown=0;
-  KANJI.forEach((k,i)=>{
-    const learned=!!ST.learned[i];
+  currentKanji().forEach((k,i)=>{
+    const key=ST.activeLvl+'_'+i;
+    const learned=!!ST.learned[key];
     let pass=true;
     if(q)pass=k.k.includes(q)||k.m.toLowerCase().includes(q)||k.on.includes(q)||k.kun.includes(q);
     else if(kFilter==='new')pass=!learned;
@@ -718,70 +1023,52 @@ function renderGrid(){
     t.textContent=k.k;t.title=k.m;t.onclick=()=>openKanji(i);
     grid.appendChild(t);
   });
-  const lbl=Object.values(ST.learned).filter(Boolean).length;
-  document.getElementById('grid-label').textContent=`Показано: ${shown} · Выучено: ${lbl} из ${KANJI.length}`;
+  const lbl=learnedCountForLevel(ST.activeLvl);
+  document.getElementById('grid-label').textContent=`${ST.activeLvl} · Показано: ${shown} · Выучено: ${lbl} из ${currentKanji().length}`;
 }
 
-// VOCAB
-let vFilter='all';
-function setVFilter(f,btn){
-  vFilter=f;document.querySelectorAll('.vf-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderVocab();
+// ===== GRAMMAR =====
+let gFilter='all';
+function setGFilter(f,btn){
+  gFilter=f;
+  document.querySelectorAll('#g-filters .k-filter').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderGrammar();
 }
-function renderVocab(){
-  const q=document.getElementById('vocab-search').value.toLowerCase();
-  const list=document.getElementById('vocab-list');list.innerHTML='';let shown=0;
-  VOCAB.forEach(v=>{
-    let pass=true;
-    if(q)pass=v.jp.includes(q)||v.r.includes(q)||v.m.toLowerCase().includes(q);
-    else if(vFilter==='глагол')pass=v.t.includes('глагол');
-    else if(vFilter==='прилаг')pass=v.t.includes('прилаг');
-    else if(vFilter==='N5')pass=v.t==='N5';
-    if(!pass)return;shown++;
-    const d=document.createElement('div');d.className='vocab-card';
-    d.innerHTML=`<div class="vjp">${v.jp}</div><div style="flex:1"><div class="vread">${v.r}</div><div class="vmean">${v.m}</div></div><span class="vtag">${v.t}</span>`;
-    list.appendChild(d);
-  });
-  document.getElementById('vocab-label').textContent=`Показано: ${shown} из ${VOCAB.length}`;
-}
-
-// GRAMMAR
 function renderGrammar(){
-  const list=document.getElementById('grammar-list');if(list.children.length)return;
+  const list=document.getElementById('grammar-list');list.innerHTML='';
+  const active=ST.activeLvl;
+  // show current and lower levels
+  const availLvls=['N5'];
+  if(active==='N4'||active==='N3')availLvls.push('N4');
+  if(active==='N3')availLvls.push('N3');
+
   GRAMMAR.forEach(g=>{
+    if(gFilter!=='all'&&g.l!==gFilter)return;
+    if(!availLvls.includes(g.l))return;
     const d=document.createElement('div');d.className='g-card';
     const exHTML=g.ex.map(e=>`<div class="g-ex"><div class="g-ex-jp">${e.jp}</div><div class="g-ex-ru">${e.ru}</div></div>`).join('');
-    d.innerHTML=`<div class="g-head"><span class="g-pattern">${g.p}</span><span class="g-lvl">${g.l}</span></div><div class="g-meaning">${g.m}</div><div class="g-body">${exHTML}</div>`;
+    const lvlClass=g.l==='N4'?'n4':g.l==='N3'?'n3':'';
+    d.innerHTML=`<div class="g-head"><span class="g-pattern">${g.p}</span><span class="g-lvl ${lvlClass}">${g.l}</span></div><div class="g-meaning">${g.m}</div><div class="g-body">${exHTML}</div>`;
     d.onclick=()=>d.classList.toggle('open');list.appendChild(d);
   });
 }
 
-// EXCEPTIONS
+// ===== EXCEPTIONS =====
 function renderExceptions(){
   function makeCards(data,id){
     const c=document.getElementById(id);if(c.children.length)return;
     data.forEach(e=>{
       const d=document.createElement('div');d.className='exc-card';
       const exHTML=(e.ex||[]).map(x=>`<div class="exc-eg"><div class="jp">${x.jp}</div><div class="ru">${x.ru}</div></div>`).join('');
-      d.innerHTML=`
-        <div class="exc-top">
-          <div><div class="exc-word">${e.word}</div>${e.read?`<div class="exc-read">${e.read}</div>`:''}</div>
-          <span class="exc-badge ${e.badge}">${e.label}</span>
-        </div>
-        <div class="exc-body">
-          <div class="exc-explain">${e.explain}</div>
-          <div class="exc-rule wrong">${e.wrong}</div>
-          <div class="exc-rule right">${e.right}</div>
-          ${exHTML?`<div class="exc-examples">${exHTML}</div>`:''}
-        </div>`;
+      d.innerHTML=`<div class="exc-top"><div><div class="exc-word">${e.word}</div>${e.read?`<div class="exc-read">${e.read}</div>`:''}</div><span class="exc-badge ${e.badge}">${e.label}</span></div>
+        <div class="exc-body"><div class="exc-explain">${e.explain}</div><div class="exc-rule wrong">${e.wrong}</div><div class="exc-rule right">${e.right}</div>${exHTML?`<div class="exc-examples">${exHTML}</div>`:''}</div>`;
       d.onclick=()=>d.classList.toggle('open');c.appendChild(d);
     });
   }
-  makeCards(EXC_TRAPS,'exc-traps');
-  makeCards(EXC_IRREG,'exc-irreg');
-  makeCards(EXC_RULES,'exc-rules');
+  makeCards(EXC_TRAPS,'exc-traps');makeCards(EXC_IRREG,'exc-irreg');makeCards(EXC_RULES,'exc-rules');
 }
 
-// NAV
+// ===== NAV =====
 function showTab(id,btn){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -792,17 +1079,12 @@ function showTab(id,btn){
   document.getElementById('gclear').style.display='none';
   document.getElementById('tab-'+id).style.display='';
   if(id==='kanji')renderGrid();
-  if(id==='vocab')renderVocab();
   if(id==='grammar')renderGrammar();
   if(id==='exc')renderExceptions();
 }
 
-function updateProgress(){
-  const n=Object.values(ST.learned).filter(Boolean).length;
-  document.getElementById('main-prog').style.width=Math.round(n/KANJI.length*100)+'%';
-}
-
-buildQueue();updateProgress();renderGrid();
+// Init
+applyLevel();
 </script>
 </body>
 </html>
